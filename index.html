@@ -44,7 +44,8 @@
         color: #999;
       }
 
-      .container {
+      /* ── FORM VIEW ── */
+      #view-form {
         flex: 1;
         display: flex;
         align-items: center;
@@ -152,6 +153,124 @@
         color: #555;
       }
 
+      /* ── PRODUCT VIEW ── */
+      #view-product {
+        display: none;
+        flex: 1;
+        flex-direction: column;
+      }
+
+      .product {
+        max-width: 480px;
+        margin: 0 auto;
+        background: #fff;
+        width: 100%;
+        animation: fadeUp 0.4s ease both;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .product-image {
+        position: relative;
+        aspect-ratio: 3/4;
+        overflow: hidden;
+        background: #ececec;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .product-image .placeholder {
+        font-size: 72px;
+        color: #ccc;
+      }
+      .tag-categoria {
+        position: absolute;
+        bottom: 16px;
+        left: 16px;
+        background: #fff;
+        color: #1a1a1a;
+        font-size: 10px;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        padding: 6px 12px;
+        font-weight: 500;
+      }
+      .product-info {
+        padding: 28px 24px 48px;
+      }
+      .product-title {
+        font-size: 26px;
+        font-weight: 400;
+        line-height: 1.2;
+        margin-bottom: 14px;
+        letter-spacing: -0.3px;
+      }
+      .divider {
+        width: 32px;
+        height: 2px;
+        background: #1a1a1a;
+        margin-bottom: 16px;
+      }
+      .product-description {
+        font-size: 14px;
+        line-height: 1.75;
+        color: #666;
+        font-weight: 300;
+      }
+
+      .btn-voltar {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 12px;
+        color: #999;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-family: "Inter", sans-serif;
+        padding: 0;
+        transition: color 0.2s;
+      }
+      .btn-voltar:hover {
+        color: #1a1a1a;
+      }
+
+      @media (min-width: 768px) {
+        .product {
+          max-width: 960px;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+        }
+        .product-image {
+          aspect-ratio: auto;
+          min-height: 580px;
+        }
+        .product-info {
+          padding: 48px 44px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+        .product-title {
+          font-size: 32px;
+        }
+      }
+
       @media (max-width: 480px) {
         .card {
           padding: 28px 20px;
@@ -161,16 +280,16 @@
   </head>
   <body>
     <nav>
-      <a href="#">
-        <img
+      <a href="#"
+        ><img
           src="https://sizebay.com/wp-content/uploads/2025/10/logo-sizebay-atualizado.svg"
           alt="Sizebay"
-        />
-      </a>
-      <span class="nav-tag">Demo — TryOn</span>
+      /></a>
+      <span class="nav-tag" id="nav-label">Demo — TryOn</span>
     </nav>
 
-    <div class="container">
+    <!-- FORMULÁRIO -->
+    <div id="view-form">
       <div class="card">
         <div class="field">
           <label>Nome do Produto</label>
@@ -180,7 +299,6 @@
             placeholder="Ex: Trench Coat Milano"
           />
         </div>
-
         <div class="field">
           <label>Categoria</label>
           <input
@@ -189,7 +307,6 @@
             placeholder="Ex: Casacos, Vestidos, Calças..."
           />
         </div>
-
         <div class="field">
           <label>Descrição</label>
           <textarea
@@ -197,7 +314,6 @@
             placeholder="Descreva o produto, materiais, estilo, ocasião..."
           ></textarea>
         </div>
-
         <div class="field">
           <label>Link da Imagem</label>
           <input
@@ -206,13 +322,35 @@
             placeholder="https://..."
             oninput="previewLink()"
           />
-          <img id="img-preview" class="img-preview" alt="Preview da imagem" />
+          <img id="img-preview" class="img-preview" alt="Preview" />
         </div>
-
         <button class="btn-gerar" onclick="gerar()">
           Gerar Página de Produto →
         </button>
         <button class="btn-limpar" onclick="limpar()">Limpar tudo</button>
+      </div>
+    </div>
+
+    <!-- PRODUTO -->
+    <div id="view-product">
+      <div class="product">
+        <div class="product-image">
+          <div class="placeholder" id="prod-placeholder">👗</div>
+          <img id="prod-img" src="" alt="" style="display: none" />
+          <span class="tag-categoria" id="prod-cat"></span>
+        </div>
+        <div class="product-info">
+          <button
+            class="btn-voltar"
+            onclick="voltar()"
+            style="margin-bottom: 24px"
+          >
+            ← Editar produto
+          </button>
+          <h1 class="product-title" id="prod-titulo"></h1>
+          <div class="divider"></div>
+          <p class="product-description" id="prod-desc"></p>
+        </div>
       </div>
     </div>
 
@@ -242,176 +380,68 @@
           return;
         }
 
-        const imgTag = img
-          ? `<img src="${img}" alt="${nome}">`
-          : `<div class="placeholder">👗</div>`;
+        // Popula a página de produto
+        document.getElementById("prod-titulo").textContent = nome;
+        document.getElementById("prod-cat").textContent = cat;
+        document.getElementById("prod-desc").textContent = desc;
 
-        // Escape strings para uso seguro dentro do JS gerado
-        const safeNome = nome.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
-        const safeImg = img.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+        const prodImg = document.getElementById("prod-img");
+        const prodPlaceholder = document.getElementById("prod-placeholder");
 
-        const html = `<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>${nome || "Produto"}</title>
-<link rel="canonical" href="https://32c6c6-a9.myshopify.com/products/${encodeURIComponent(
-          nome || "produto"
-        )}">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: 'Inter', sans-serif;
-    background: #f5f5f5;
-    color: #1a1a1a;
-    min-height: 100vh;
-  }
-  nav {
-    padding: 16px 24px;
-    background: #fff;
-    border-bottom: 1px solid #e8e8e8;
-    display: flex;
-    align-items: center;
-  }
-  nav img { height: 24px; }
-  .product {
-    max-width: 480px;
-    margin: 0 auto;
-    background: #fff;
-    animation: fadeUp 0.4s ease both;
-  }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .product-image {
-    position: relative;
-    aspect-ratio: 3/4;
-    overflow: hidden;
-    background: #ececec;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .product-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-  .product-image .placeholder {
-    font-size: 72px;
-    color: #ccc;
-  }
-  .tag-categoria {
-    position: absolute;
-    bottom: 16px;
-    left: 16px;
-    background: #fff;
-    color: #1a1a1a;
-    font-size: 10px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 6px 12px;
-    font-weight: 500;
-  }
-  .product-info {
-    padding: 28px 24px 48px;
-  }
-  .product-title {
-    font-size: 26px;
-    font-weight: 400;
-    line-height: 1.2;
-    margin-bottom: 14px;
-    letter-spacing: -0.3px;
-  }
-  .divider {
-    width: 32px;
-    height: 2px;
-    background: #1a1a1a;
-    margin-bottom: 16px;
-  }
-  .product-description {
-    font-size: 14px;
-    line-height: 1.75;
-    color: #666;
-    font-weight: 300;
-  }
-  @media (min-width: 768px) {
-    .product {
-      max-width: 960px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-    }
-    .product-image { aspect-ratio: auto; min-height: 580px; }
-    .product-info {
-      padding: 48px 44px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    .product-title { font-size: 32px; }
-  }
-</style>
-</head>
-<body>
-<nav>
-  <img src="https://sizebay.com/wp-content/uploads/2025/10/logo-sizebay-atualizado.svg" alt="Sizebay">
-</nav>
-<main class="product">
-  <div class="product-image">
-    ${imgTag}
-    ${cat ? `<span class="tag-categoria">${cat}</span>` : ""}
-  </div>
-  <div class="product-info">
-    ${nome ? `<h1 class="product-title">${nome}</h1>` : ""}
-    <div class="divider"></div>
-    ${desc ? `<p class="product-description">${desc}</p>` : ""}
-  </div>
-</main>
+        if (img) {
+          prodImg.src = img;
+          prodImg.style.display = "block";
+          prodPlaceholder.style.display = "none";
+        } else {
+          prodImg.style.display = "none";
+          prodPlaceholder.style.display = "flex";
+        }
 
-<script>
-  document.cookie = 'SIZEBAY_SESSION_ID_V4=0651FC19655De443cc7be89c4306ba6c1a20f4f05df2; path=/; SameSite=Lax'
+        // Troca de view
+        document.getElementById("view-form").style.display = "none";
+        const viewProd = document.getElementById("view-product");
+        viewProd.style.display = "flex";
 
-  const collectProductData = () => ({
-    title: '${safeNome}',
-    image_url: '${safeImg}',
-  })
+        // Seta cookie (agora na mesma origem, sem problema)
+        document.cookie =
+          "SIZEBAY_SESSION_ID_V4=0651FC19655De443cc7be89c4306ba6c1a20f4f05df2; path=/; SameSite=Lax";
 
-  window.SizebayTryOn = () => ({
-    getTenantId: () => 6273,
-    getEnvironment: () => 'production',
-    getDefaultUnit: () => 'cm',
-    getSizeSystem: () => 'EU',
-    getAnchor: () => '.product-image',
-    getModules: () => ['selfTryon'],
-    getLang: 'br',
-    getSelfTryonPermalink: () =>
-      'https://32c6c6-a9.myshopify.com/products/' +
-      document.querySelector('link[rel="canonical"]').href.split('/products/').pop(),
-    getProductData: collectProductData,
-    getBaseVrfUrl: () => 'https://vfr-v3-production.sizebay.technology/',
-    getSelfTryonBaseUrl: () => 'https://tryon-dev.internalsizebay.com/tryon/index.html',
-  })
+        // Injeta script Sizebay uma única vez
+        if (!document.getElementById("szb-vfr__module")) {
+          window.SizebayTryOn = () => ({
+            getTenantId: () => 6273,
+            getEnvironment: () => "production",
+            getDefaultUnit: () => "cm",
+            getSizeSystem: () => "EU",
+            getAnchor: () => ".product-image",
+            getModules: () => ["selfTryon"],
+            getLang: "br",
+            getSelfTryonPermalink: () =>
+              "https://32c6c6-a9.myshopify.com/products/" +
+              encodeURIComponent(nome),
+            getProductData: () => ({
+              title: nome,
+              image_url: img,
+            }),
+            getBaseVrfUrl: () =>
+              "https://vfr-v3-production.sizebay.technology/",
+            getSelfTryonBaseUrl: () =>
+              "https://tryon-dev.internalsizebay.com/tryon/index.html",
+          });
 
-  const insertSizebayScript = (src) => {
-    const script = document.createElement('script')
-    script.id = 'szb-vfr__module'
-    script.src = src
-    document.head.appendChild(script)
-  }
+          const script = document.createElement("script");
+          script.id = "szb-vfr__module";
+          script.src =
+            "https://vfr-implantation.s3.us-east-1.amazonaws.com/new-implantation/szb-implantation.js";
+          document.head.appendChild(script);
+        }
 
-  insertSizebayScript('https://vfr-implantation.s3.us-east-1.amazonaws.com/new-implantation/szb-implantation.js')
-<\/script>
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
 
-</body>
-</html>`;
-
-        const blob = new Blob([html], { type: "text/html" });
-        const url = URL.createObjectURL(blob);
-        window.open(url, "_blank");
+      function voltar() {
+        document.getElementById("view-product").style.display = "none";
+        document.getElementById("view-form").style.display = "flex";
       }
 
       function limpar() {
