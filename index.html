@@ -181,12 +181,7 @@
         </div>
         <div class="field">
           <label>Link da Imagem</label>
-          <input
-            type="text"
-            id="inp-imagem"
-            placeholder="https://..."
-            oninput="previewLink()"
-          />
+          <input type="text" id="inp-imagem" placeholder="https://..." />
           <img id="img-preview" class="img-preview" alt="Preview" />
         </div>
         <button class="btn-gerar" onclick="gerar()">Gerar Página →</button>
@@ -195,20 +190,6 @@
     </div>
 
     <script>
-      function previewLink() {
-        const url = document.getElementById("inp-imagem").value.trim();
-        const prev = document.getElementById("img-preview");
-        if (url) {
-          prev.src = url;
-          prev.style.display = "block";
-          prev.onerror = () => {
-            prev.style.display = "none";
-          };
-        } else {
-          prev.style.display = "none";
-        }
-      }
-
       function gerar() {
         const nome = document.getElementById("inp-nome").value.trim();
         const img = document.getElementById("inp-imagem").value.trim();
