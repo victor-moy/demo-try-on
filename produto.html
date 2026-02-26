@@ -34,6 +34,12 @@
       nav img {
         height: 24px;
       }
+      .nav-right {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+
       .btn-voltar {
         font-size: 12px;
         color: #999;
@@ -43,6 +49,33 @@
       }
       .btn-voltar:hover {
         color: #1a1a1a;
+      }
+
+      /* Language toggle */
+      .lang-toggle {
+        display: flex;
+        align-items: center;
+        background: #f0f0f0;
+        border-radius: 20px;
+        padding: 3px;
+        gap: 2px;
+      }
+      .lang-btn {
+        padding: 4px 10px;
+        border-radius: 16px;
+        border: none;
+        background: transparent;
+        font-family: "Inter", sans-serif;
+        font-size: 11px;
+        font-weight: 500;
+        color: #999;
+        cursor: pointer;
+        transition: all 0.2s;
+        letter-spacing: 0.5px;
+      }
+      .lang-btn.active {
+        background: #1a1a1a;
+        color: #fff;
       }
 
       .product {
@@ -128,7 +161,19 @@
         src="https://sizebay.com/wp-content/uploads/2025/10/logo-sizebay-atualizado.svg"
         alt="Sizebay"
       />
-      <a class="btn-voltar" href="index.html">← Voltar ao formulário</a>
+      <div class="nav-right">
+        <div class="lang-toggle">
+          <button class="lang-btn" id="btn-pt" onclick="setLang('pt')">
+            PT
+          </button>
+          <button class="lang-btn" id="btn-en" onclick="setLang('en')">
+            EN
+          </button>
+        </div>
+        <a class="btn-voltar" id="btn-voltar" href="index.html"
+          >← Voltar ao formulário</a
+        >
+      </div>
     </nav>
 
     <main class="product">
@@ -143,17 +188,32 @@
     </main>
 
     <script>
-      // Lê query params da URL — tem prioridade sobre tudo
-      const params = new URLSearchParams(window.location.search);
-      const nome = params.get("nome") || "";
-      const img = params.get("img") || "";
+      const i18n = {
+        pt: {
+          btn_voltar: "← Voltar ao formulário",
+          page_title: "Produto",
+          lang_attr: "pt-BR",
+          sizebay_lang: "br",
+        },
+        en: {
+          btn_voltar: "← Back to form",
+          page_title: "Product",
+          lang_attr: "en",
+          sizebay_lang: "en",
+        },
+      };
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const nome = urlParams.get("nome") || "";
+      const img = urlParams.get("img") || "";
+      let currentLang =
+        urlParams.get("lang") || localStorage.getItem("szb_lang") || "pt";
 
       if (!nome && !img) {
-        // Nenhum query param: redireciona pro formulário
         window.location.href = "index.html";
       } else {
-        // Preenche a página
-        document.title = nome || "Produto";
+        // Preenche conteúdo
+        document.title = nome || i18n[currentLang].page_title;
         document.querySelector('link[rel="canonical"]').href =
           "https://32c6c6-a9.myshopify.com/products/" +
           encodeURIComponent(nome || "produto");
@@ -165,6 +225,29 @@
           document.getElementById("prod-img").style.display = "block";
           document.getElementById("prod-placeholder").style.display = "none";
         }
+
+        function setLang(lang) {
+          currentLang = lang;
+          localStorage.setItem("szb_lang", lang);
+
+          document.documentElement.lang = i18n[lang].lang_attr;
+          document
+            .getElementById("btn-pt")
+            .classList.toggle("active", lang === "pt");
+          document
+            .getElementById("btn-en")
+            .classList.toggle("active", lang === "en");
+          document.getElementById("btn-voltar").textContent =
+            i18n[lang].btn_voltar;
+
+          // Atualiza a URL sem recarregar para refletir o lang atual
+          const newParams = new URLSearchParams(window.location.search);
+          newParams.set("lang", lang);
+          window.history.replaceState({}, "", "?" + newParams.toString());
+        }
+
+        // Inicializa idioma
+        setLang(currentLang);
 
         // Cookie
         document.cookie =
@@ -184,7 +267,7 @@
           getSizeSystem: () => "EU",
           getAnchor: () => ".product-image",
           getModules: () => ["selfTryon"],
-          getLang: "br",
+          getLang: i18n[currentLang].sizebay_lang,
           getSelfTryonPermalink: () =>
             "https://32c6c6-a9.myshopify.com/products/" +
             document
