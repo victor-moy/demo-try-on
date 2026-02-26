@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sizebay — Demo TryOn</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: #f0f0f0;
+        color: #1a1a1a;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      nav {
+        padding: 16px 24px;
+        background: #fff;
+        border-bottom: 1px solid #e8e8e8;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .logo img {
+        height: 26px;
+        display: block;
+      }
+      .nav-tag {
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #999;
+      }
+
+      .container {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 24px;
+      }
+
+      .card {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+        padding: 40px 36px;
+        width: 100%;
+        max-width: 480px;
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      label {
+        font-size: 11px;
+        font-weight: 500;
+        color: #555;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+      }
+
+      input[type="text"],
+      textarea {
+        width: 100%;
+        padding: 11px 14px;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        font-family: "Inter", sans-serif;
+        font-size: 14px;
+        color: #1a1a1a;
+        background: #fafafa;
+        transition: border-color 0.2s, background 0.2s;
+        outline: none;
+      }
+      input[type="text"]:focus,
+      textarea:focus {
+        border-color: #1a1a1a;
+        background: #fff;
+      }
+      textarea {
+        resize: vertical;
+        min-height: 100px;
+        line-height: 1.6;
+      }
+
+      .img-preview {
+        width: 100%;
+        max-height: 160px;
+        object-fit: cover;
+        border-radius: 6px;
+        margin-top: 4px;
+        display: none;
+        border: 1px solid #e0e0e0;
+      }
+
+      .btn-gerar {
+        width: 100%;
+        padding: 14px;
+        background: #1a1a1a;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-family: "Inter", sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.1s;
+        margin-top: 4px;
+      }
+      .btn-gerar:hover {
+        background: #333;
+      }
+      .btn-gerar:active {
+        transform: scale(0.98);
+      }
+
+      .btn-limpar {
+        width: 100%;
+        padding: 10px;
+        background: transparent;
+        color: #999;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        font-family: "Inter", sans-serif;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .btn-limpar:hover {
+        border-color: #aaa;
+        color: #555;
+      }
+
+      @media (max-width: 480px) {
+        .card {
+          padding: 28px 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <a href="#">
+        <img
+          src="https://sizebay.com/wp-content/uploads/2025/10/logo-sizebay-atualizado.svg"
+          alt="Sizebay"
+        />
+      </a>
+      <span class="nav-tag">Demo — TryOn</span>
+    </nav>
+
+    <div class="container">
+      <div class="card">
+        <div class="field">
+          <label>Nome do Produto</label>
+          <input
+            type="text"
+            id="inp-nome"
+            placeholder="Ex: Trench Coat Milano"
+          />
+        </div>
+
+        <div class="field">
+          <label>Categoria</label>
+          <input
+            type="text"
+            id="inp-categoria"
+            placeholder="Ex: Casacos, Vestidos, Calças..."
+          />
+        </div>
+
+        <div class="field">
+          <label>Descrição</label>
+          <textarea
+            id="inp-descricao"
+            placeholder="Descreva o produto, materiais, estilo, ocasião..."
+          ></textarea>
+        </div>
+
+        <div class="field">
+          <label>Link da Imagem</label>
+          <input
+            type="text"
+            id="inp-imagem"
+            placeholder="https://..."
+            oninput="previewLink()"
+          />
+          <img id="img-preview" class="img-preview" alt="Preview da imagem" />
+        </div>
+
+        <button class="btn-gerar" onclick="gerar()">
+          Gerar Página de Produto →
+        </button>
+        <button class="btn-limpar" onclick="limpar()">Limpar tudo</button>
+      </div>
+    </div>
+
+    <script>
+      function previewLink() {
+        const url = document.getElementById("inp-imagem").value.trim();
+        const prev = document.getElementById("img-preview");
+        if (url) {
+          prev.src = url;
+          prev.style.display = "block";
+          prev.onerror = () => {
+            prev.style.display = "none";
+          };
+        } else {
+          prev.style.display = "none";
+        }
+      }
+
+      function gerar() {
+        const nome = document.getElementById("inp-nome").value.trim();
+        const cat = document.getElementById("inp-categoria").value.trim();
+        const desc = document.getElementById("inp-descricao").value.trim();
+        const img = document.getElementById("inp-imagem").value.trim();
+
+        if (!nome && !cat && !desc && !img) {
+          alert("Preencha pelo menos um campo antes de gerar.");
+          return;
+        }
+
+        const imgTag = img
+          ? `<img src="${img}" alt="${nome}">`
+          : `<div class="placeholder">👗</div>`;
+
+        // Escape strings para uso seguro dentro do JS gerado
+        const safeNome = nome.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+        const safeImg = img.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+
+        const html = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${nome || "Produto"}</title>
+<link rel="canonical" href="https://32c6c6-a9.myshopify.com/products/${encodeURIComponent(
+          nome || "produto"
+        )}">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #f5f5f5;
+    color: #1a1a1a;
+    min-height: 100vh;
+  }
+  nav {
+    padding: 16px 24px;
+    background: #fff;
+    border-bottom: 1px solid #e8e8e8;
+    display: flex;
+    align-items: center;
+  }
+  nav img { height: 24px; }
+  .product {
+    max-width: 480px;
+    margin: 0 auto;
+    background: #fff;
+    animation: fadeUp 0.4s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .product-image {
+    position: relative;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    background: #ececec;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .product-image .placeholder {
+    font-size: 72px;
+    color: #ccc;
+  }
+  .tag-categoria {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    background: #fff;
+    color: #1a1a1a;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    font-weight: 500;
+  }
+  .product-info {
+    padding: 28px 24px 48px;
+  }
+  .product-title {
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 14px;
+    letter-spacing: -0.3px;
+  }
+  .divider {
+    width: 32px;
+    height: 2px;
+    background: #1a1a1a;
+    margin-bottom: 16px;
+  }
+  .product-description {
+    font-size: 14px;
+    line-height: 1.75;
+    color: #666;
+    font-weight: 300;
+  }
+  @media (min-width: 768px) {
+    .product {
+      max-width: 960px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .product-image { aspect-ratio: auto; min-height: 580px; }
+    .product-info {
+      padding: 48px 44px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .product-title { font-size: 32px; }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <img src="https://sizebay.com/wp-content/uploads/2025/10/logo-sizebay-atualizado.svg" alt="Sizebay">
+</nav>
+<main class="product">
+  <div class="product-image">
+    ${imgTag}
+    ${cat ? `<span class="tag-categoria">${cat}</span>` : ""}
+  </div>
+  <div class="product-info">
+    ${nome ? `<h1 class="product-title">${nome}</h1>` : ""}
+    <div class="divider"></div>
+    ${desc ? `<p class="product-description">${desc}</p>` : ""}
+  </div>
+</main>
+
+<script>
+  document.cookie = 'SIZEBAY_SESSION_ID_V4=0651FC19655De443cc7be89c4306ba6c1a20f4f05df2; path=/; SameSite=Lax'
+
+  const collectProductData = () => ({
+    title: '${safeNome}',
+    image_url: '${safeImg}',
+  })
+
+  window.SizebayTryOn = () => ({
+    getTenantId: () => 6273,
+    getEnvironment: () => 'production',
+    getDefaultUnit: () => 'cm',
+    getSizeSystem: () => 'EU',
+    getAnchor: () => '.product-image',
+    getModules: () => ['selfTryon'],
+    getLang: 'br',
+    getSelfTryonPermalink: () =>
+      'https://32c6c6-a9.myshopify.com/products/' +
+      document.querySelector('link[rel="canonical"]').href.split('/products/').pop(),
+    getProductData: collectProductData,
+    getBaseVrfUrl: () => 'https://vfr-v3-production.sizebay.technology/',
+    getSelfTryonBaseUrl: () => 'https://tryon-dev.internalsizebay.com/tryon/index.html',
+  })
+
+  const insertSizebayScript = (src) => {
+    const script = document.createElement('script')
+    script.id = 'szb-vfr__module'
+    script.src = src
+    document.head.appendChild(script)
+  }
+
+  insertSizebayScript('https://vfr-implantation.s3.us-east-1.amazonaws.com/new-implantation/szb-implantation.js')
+<\/script>
+
+</body>
+</html>`;
+
+        const blob = new Blob([html], { type: "text/html" });
+        const url = URL.createObjectURL(blob);
+        window.open(url, "_blank");
+      }
+
+      function limpar() {
+        document.getElementById("inp-nome").value = "";
+        document.getElementById("inp-categoria").value = "";
+        document.getElementById("inp-descricao").value = "";
+        document.getElementById("inp-imagem").value = "";
+        const prev = document.getElementById("img-preview");
+        prev.src = "";
+        prev.style.display = "none";
+      }
+    </script>
+  </body>
+</html>
