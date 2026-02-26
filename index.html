@@ -211,11 +211,9 @@
 
       function gerar() {
         const nome = document.getElementById("inp-nome").value.trim();
-        const cat = document.getElementById("inp-categoria").value.trim();
-        const desc = document.getElementById("inp-descricao").value.trim();
         const img = document.getElementById("inp-imagem").value.trim();
 
-        if (!nome && !cat && !desc && !img) {
+        if (!nome && !img) {
           alert("Preencha pelo menos um campo antes de gerar.");
           return;
         }
@@ -230,8 +228,6 @@
 
       function limpar() {
         document.getElementById("inp-nome").value = "";
-        document.getElementById("inp-categoria").value = "";
-        document.getElementById("inp-descricao").value = "";
         document.getElementById("inp-imagem").value = "";
         const prev = document.getElementById("img-preview");
         prev.src = "";
