@@ -220,7 +220,7 @@
 
         // Salva os dados e redireciona
         localStorage.setItem("szb_produto", JSON.stringify({ nome, img }));
-        window.open("produto.html", "_blank");
+        window.location.href = "produto.html";
       }
 
       function limpar() {
