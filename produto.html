@@ -39,7 +39,6 @@
         align-items: center;
         gap: 16px;
       }
-
       .btn-voltar {
         font-size: 12px;
         color: #999;
@@ -51,7 +50,6 @@
         color: #1a1a1a;
       }
 
-      /* Language toggle */
       .lang-toggle {
         display: flex;
         align-items: center;
@@ -212,7 +210,7 @@
       if (!nome && !img) {
         window.location.href = "index.html";
       } else {
-        // Preenche conteúdo
+        // ── Preenche conteúdo ──
         document.title = nome || i18n[currentLang].page_title;
         document.querySelector('link[rel="canonical"]').href =
           "https://32c6c6-a9.myshopify.com/products/" +
@@ -226,10 +224,10 @@
           document.getElementById("prod-placeholder").style.display = "none";
         }
 
+        // ── Idioma ──
         function setLang(lang) {
           currentLang = lang;
           localStorage.setItem("szb_lang", lang);
-
           document.documentElement.lang = i18n[lang].lang_attr;
           document
             .getElementById("btn-pt")
@@ -239,27 +237,19 @@
             .classList.toggle("active", lang === "en");
           document.getElementById("btn-voltar").textContent =
             i18n[lang].btn_voltar;
-
-          // Atualiza a URL sem recarregar para refletir o lang atual
-          const newParams = new URLSearchParams(window.location.search);
-          newParams.set("lang", lang);
-          window.history.replaceState({}, "", "?" + newParams.toString());
+          const p = new URLSearchParams(window.location.search);
+          p.set("lang", lang);
+          window.history.replaceState({}, "", "?" + p.toString());
         }
 
-        // Inicializa idioma
         setLang(currentLang);
 
-        // Cookie
+        // ── Cookie ──
         document.cookie =
           "SIZEBAY_SESSION_ID_V4=0651FC19655De443cc7be89c4306ba6c1a20f4f05df2; path=/; SameSite=Lax";
 
-        const collectProductData = () => ({
-          product_id: null,
-          title: document.querySelector(".product-title").textContent,
-          price: null,
-          image_url: document.querySelector(".product-image img")?.src || "",
-        });
-
+        // ── Sizebay: define ANTES de injetar o script, dentro do DOMContentLoaded ──
+        // Garante que o anchor (.product-image) já existe no DOM quando o script rodar
         window.SizebayTryOn = () => ({
           getTenantId: () => 6273,
           getEnvironment: () => "production",
@@ -267,14 +257,19 @@
           getSizeSystem: () => "EU",
           getAnchor: () => ".product-image",
           getModules: () => ["selfTryon"],
-          getLang: i18n[currentLang].sizebay_lang,
+          getLang: () => i18n[currentLang].sizebay_lang, // função, não valor fixo
           getSelfTryonPermalink: () =>
             "https://32c6c6-a9.myshopify.com/products/" +
             document
               .querySelector('link[rel="canonical"]')
               .href.split("/products/")
               .pop(),
-          getProductData: collectProductData,
+          getProductData: () => ({
+            product_id: null,
+            title: document.getElementById("prod-titulo").textContent,
+            price: null,
+            image_url: img,
+          }),
           getBaseVrfUrl: () => "https://vfr-v3-production.sizebay.technology/",
           getSelfTryonBaseUrl: () =>
             "https://tryon-dev.internalsizebay.com/tryon/index.html",
@@ -282,13 +277,31 @@
             "https://tryon-dev.internalsizebay.com/",
         });
 
-        const script = document.createElement("script");
-        script.src =
-          "https://vfr-implantation.s3.us-east-1.amazonaws.com/new-implantation/szb-implantation.js";
-        script.async = true;
-        script.id = "szb-tryon__implantation";
-        if (!document.getElementById(script.id))
+        // Injeta o script apenas após o DOM estar completamente carregado
+        window.addEventListener("DOMContentLoaded", () => {
+          if (document.getElementById("szb-tryon__implantation")) return;
+          const script = document.createElement("script");
+          script.id = "szb-tryon__implantation";
+          script.src =
+            "https://vfr-implantation.s3.us-east-1.amazonaws.com/new-implantation/szb-implantation.js";
+          script.async = true;
           document.body.appendChild(script);
+        });
+
+        // Se DOMContentLoaded já disparou (script no final do body), injeta direto
+        if (
+          document.readyState === "interactive" ||
+          document.readyState === "complete"
+        ) {
+          if (!document.getElementById("szb-tryon__implantation")) {
+            const script = document.createElement("script");
+            script.id = "szb-tryon__implantation";
+            script.src =
+              "https://vfr-implantation.s3.us-east-1.amazonaws.com/new-implantation/szb-implantation.js";
+            script.async = true;
+            document.body.appendChild(script);
+          }
+        }
       }
     </script>
   </body>
