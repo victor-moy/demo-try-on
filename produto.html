@@ -187,33 +187,47 @@
           document.getElementById("prod-placeholder").style.display = "none";
         }
 
-        /*   // Cookie e script Sizebay
+        // Cookie e script Sizebay
         document.cookie =
           "SIZEBAY_SESSION_ID_V4=0651FC19655De443cc7be89c4306ba6c1a20f4f05df2; path=/; SameSite=Lax";
 
-     window.SizebayTryOn = () => ({
-      getTenantId: () => 6273,
-      getEnvironment: () => 'production',
-      getDefaultUnit: () => 'cm',
-      getSizeSystem: () => 'EU',
-      getAnchor: () => '.product-image',
-      getModules: () => ['selfTryon'],
-      getLang: 'br',
-      getSelfTryonPermalink: () =>
-        'https://32c6c6-a9.myshopify.com/products/' +
-        document.querySelector('link[rel="canonical"]').href.split('/products/').pop(),
-      getProductData: () => ({
-        title: nome,
-        image_url: img,
-      }),
-      getBaseVrfUrl: () => 'https://vfr-v3-production.sizebay.technology/',
-      getSelfTryonBaseUrl: () => 'https://tryon-dev.internalsizebay.com/tryon/index.html',
-    });
+        const collectProductData = () => {
+          return {
+            product_id: null,
+            title: document.querySelector(".product-title").textContent,
+            price: null,
+            image_url: document.querySelector(".product-image img").src,
+          };
+        };
 
-    const script = document.createElement('script');
-    script.id  = 'szb-vfr__module';
-    script.src = 'https://vfr-implantation.s3.us-east-1.amazonaws.com/new-implantation/szb-implantation.js';
-    document.head.appendChild(script); */
+        window.SizebayTryOn = () => ({
+          getTenantId: () => 6273,
+          getEnvironment: () => "production",
+          getDefaultUnit: () => "cm",
+          getSizeSystem: () => "EU",
+          getAnchor: () => ".product-image",
+          getModules: () => ["selfTryon"],
+          getLang: "br",
+          getSelfTryonPermalink: () =>
+            "https://32c6c6-a9.myshopify.com/products/" +
+            document
+              .querySelector('link[rel="canonical"]')
+              .href.split("/products/")
+              .pop(),
+          getProductData: collectProductData,
+          getBaseVrfUrl: () => "https://vfr-v3-production.sizebay.technology/",
+          getSelfTryonBaseUrl: () =>
+            "https://tryon-dev.internalsizebay.com/tryon/index.html",
+          getSelfTryonBackendUrl: () =>
+            "https://tryon-dev.internalsizebay.com/",
+        });
+
+        const script = document.createElement("script");
+        script.src = `https://vfr-implantation.s3.us-east-1.amazonaws.com/new-implantation/szb-implantation.js`;
+        script.async = true;
+        script.id = "szb-tryon__implantation";
+        if (!document.getElementById(script.id))
+          document.body.appendChild(script);
       }
     </script>
   </body>
