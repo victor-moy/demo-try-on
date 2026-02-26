@@ -82,18 +82,6 @@
         font-size: 72px;
         color: #ccc;
       }
-      .tag-categoria {
-        position: absolute;
-        bottom: 16px;
-        left: 16px;
-        background: #fff;
-        color: #1a1a1a;
-        font-size: 10px;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        padding: 6px 12px;
-        font-weight: 500;
-      }
 
       .product-info {
         padding: 28px 24px 48px;
@@ -110,12 +98,6 @@
         height: 2px;
         background: #1a1a1a;
         margin-bottom: 16px;
-      }
-      .product-description {
-        font-size: 14px;
-        line-height: 1.75;
-        color: #666;
-        font-weight: 300;
       }
 
       @media (min-width: 768px) {
@@ -161,14 +143,15 @@
     </main>
 
     <script>
-      // Lê os dados salvos pelo formulário
-      const raw = localStorage.getItem("szb_produto");
+      // Lê query params da URL — tem prioridade sobre tudo
+      const params = new URLSearchParams(window.location.search);
+      const nome = params.get("nome") || "";
+      const img = params.get("img") || "";
 
-      if (!raw) {
+      if (!nome && !img) {
+        // Nenhum query param: redireciona pro formulário
         window.location.href = "index.html";
       } else {
-        const { nome, img } = JSON.parse(raw);
-
         // Preenche a página
         document.title = nome || "Produto";
         document.querySelector('link[rel="canonical"]').href =
@@ -183,18 +166,16 @@
           document.getElementById("prod-placeholder").style.display = "none";
         }
 
-        // Cookie e script Sizebay
+        // Cookie
         document.cookie =
           "SIZEBAY_SESSION_ID_V4=0651FC19655De443cc7be89c4306ba6c1a20f4f05df2; path=/; SameSite=Lax";
 
-        const collectProductData = () => {
-          return {
-            product_id: null,
-            title: document.querySelector(".product-title").textContent,
-            price: null,
-            image_url: document.querySelector(".product-image img").src,
-          };
-        };
+        const collectProductData = () => ({
+          product_id: null,
+          title: document.querySelector(".product-title").textContent,
+          price: null,
+          image_url: document.querySelector(".product-image img")?.src || "",
+        });
 
         window.SizebayTryOn = () => ({
           getTenantId: () => 6273,
@@ -219,7 +200,8 @@
         });
 
         const script = document.createElement("script");
-        script.src = `https://vfr-implantation.s3.us-east-1.amazonaws.com/new-implantation/szb-implantation.js`;
+        script.src =
+          "https://vfr-implantation.s3.us-east-1.amazonaws.com/new-implantation/szb-implantation.js";
         script.async = true;
         script.id = "szb-tryon__implantation";
         if (!document.getElementById(script.id))

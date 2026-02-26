@@ -78,8 +78,7 @@
         letter-spacing: 0.8px;
       }
 
-      input[type="text"],
-      textarea {
+      input[type="text"] {
         width: 100%;
         padding: 11px 14px;
         border: 1px solid #e0e0e0;
@@ -91,15 +90,9 @@
         transition: border-color 0.2s, background 0.2s;
         outline: none;
       }
-      input[type="text"]:focus,
-      textarea:focus {
+      input[type="text"]:focus {
         border-color: #1a1a1a;
         background: #fff;
-      }
-      textarea {
-        resize: vertical;
-        min-height: 100px;
-        line-height: 1.6;
       }
 
       .img-preview {
@@ -161,11 +154,12 @@
   </head>
   <body>
     <nav>
-      <a href="#"
-        ><img
+      <a href="#" class="logo">
+        <img
           src="https://sizebay.com/wp-content/uploads/2025/10/logo-sizebay-atualizado.svg"
           alt="Sizebay"
-      /></a>
+        />
+      </a>
       <span class="nav-tag">Demo — TryOn</span>
     </nav>
 
@@ -181,7 +175,12 @@
         </div>
         <div class="field">
           <label>Link da Imagem</label>
-          <input type="text" id="inp-imagem" placeholder="https://..." />
+          <input
+            type="text"
+            id="inp-imagem"
+            placeholder="https://..."
+            oninput="previewLink()"
+          />
           <img id="img-preview" class="img-preview" alt="Preview" />
         </div>
         <button class="btn-gerar" onclick="gerar()">Gerar Página →</button>
@@ -190,6 +189,20 @@
     </div>
 
     <script>
+      function previewLink() {
+        const url = document.getElementById("inp-imagem").value.trim();
+        const prev = document.getElementById("img-preview");
+        if (url) {
+          prev.src = url;
+          prev.style.display = "block";
+          prev.onerror = () => {
+            prev.style.display = "none";
+          };
+        } else {
+          prev.style.display = "none";
+        }
+      }
+
       function gerar() {
         const nome = document.getElementById("inp-nome").value.trim();
         const img = document.getElementById("inp-imagem").value.trim();
@@ -199,9 +212,12 @@
           return;
         }
 
-        // Salva os dados e redireciona
-        localStorage.setItem("szb_produto", JSON.stringify({ nome, img }));
-        window.location.href = "produto.html";
+        // Monta URL com query params
+        const params = new URLSearchParams();
+        if (nome) params.set("nome", nome);
+        if (img) params.set("img", img);
+
+        window.location.href = "produto.html?" + params.toString();
       }
 
       function limpar() {
