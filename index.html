@@ -219,10 +219,7 @@
         }
 
         // Salva os dados e redireciona
-        localStorage.setItem(
-          "szb_produto",
-          JSON.stringify({ nome, cat, desc, img })
-        );
+        localStorage.setItem("szb_produto", JSON.stringify({ nome, desc }));
         window.open("produto.html", "_blank");
       }
 
