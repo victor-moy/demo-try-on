@@ -101,6 +101,7 @@
         text-transform: uppercase;
         letter-spacing: 0.8px;
       }
+
       input[type="text"] {
         width: 100%;
         padding: 11px 14px;
@@ -117,15 +118,96 @@
         border-color: #1a1a1a;
         background: #fff;
       }
+      input.input-error {
+        border-color: #e53e3e !important;
+        background: #fff8f8 !important;
+      }
+      input.input-success {
+        border-color: #38a169 !important;
+      }
+
+      /* Mensagem de erro */
+      .field-error {
+        display: none;
+        align-items: flex-start;
+        gap: 8px;
+        background: #fff5f5;
+        border: 1px solid #fed7d7;
+        border-radius: 6px;
+        padding: 10px 12px;
+        margin-top: 2px;
+      }
+      .field-error.visible {
+        display: flex;
+      }
+      .field-error-icon {
+        font-size: 14px;
+        flex-shrink: 0;
+        margin-top: 1px;
+      }
+      .field-error-text {
+        font-size: 12px;
+        color: #c53030;
+        line-height: 1.5;
+      }
+
+      /* Preview da imagem */
+      .img-preview-wrap {
+        position: relative;
+        margin-top: 4px;
+        display: none;
+      }
+      .img-preview-wrap.visible {
+        display: block;
+      }
       .img-preview {
         width: 100%;
         max-height: 160px;
         object-fit: cover;
         border-radius: 6px;
-        margin-top: 4px;
-        display: none;
         border: 1px solid #e0e0e0;
+        display: block;
       }
+      .img-preview-badge {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: #38a169;
+        color: #fff;
+        font-size: 10px;
+        font-weight: 500;
+        padding: 3px 8px;
+        border-radius: 10px;
+        letter-spacing: 0.5px;
+      }
+
+      /* Loading spinner */
+      .img-loading {
+        display: none;
+        align-items: center;
+        gap: 8px;
+        margin-top: 6px;
+        font-size: 12px;
+        color: #999;
+      }
+      .img-loading.visible {
+        display: flex;
+      }
+      .spinner {
+        width: 14px;
+        height: 14px;
+        border: 2px solid #e0e0e0;
+        border-top-color: #999;
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+        flex-shrink: 0;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
       .btn-gerar {
         width: 100%;
         padding: 14px;
@@ -147,6 +229,11 @@
       }
       .btn-gerar:active {
         transform: scale(0.98);
+      }
+      .btn-gerar:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
       }
       .btn-limpar {
         width: 100%;
@@ -199,18 +286,51 @@
             placeholder="Ex: Trench Coat Milano"
           />
         </div>
+
         <div class="field">
-          <label data-i18n="label_img">Link da Imagem</label>
+          <label data-i18n="label_img">Link da Imagem do Produto</label>
           <input
             type="text"
             id="inp-imagem"
             data-i18n-placeholder="placeholder_img"
             placeholder="https://..."
-            oninput="previewLink()"
+            oninput="onImageInput()"
           />
-          <img id="img-preview" class="img-preview" alt="Preview" />
+
+          <!-- Loading -->
+          <div class="img-loading" id="img-loading">
+            <div class="spinner"></div>
+            <span data-i18n="img_validating">Verificando imagem...</span>
+          </div>
+
+          <!-- Erro -->
+          <div class="field-error" id="img-error">
+            <span class="field-error-icon">⚠️</span>
+            <span
+              class="field-error-text"
+              id="img-error-text"
+              data-i18n="img_error"
+            >
+              Este link não parece ser uma imagem válida. Por favor, use o link
+              direto da imagem (deve terminar em .jpg, .png, .webp, etc).
+            </span>
+          </div>
+
+          <!-- Preview -->
+          <div class="img-preview-wrap" id="img-preview-wrap">
+            <img id="img-preview" class="img-preview" alt="Preview" />
+            <span class="img-preview-badge" data-i18n="img_ok"
+              >✓ Imagem válida</span
+            >
+          </div>
         </div>
-        <button class="btn-gerar" onclick="gerar()" data-i18n="btn_gerar">
+
+        <button
+          class="btn-gerar"
+          id="btn-gerar"
+          onclick="gerar()"
+          data-i18n="btn_gerar"
+        >
           Gerar Página →
         </button>
         <button class="btn-limpar" onclick="limpar()" data-i18n="btn_limpar">
@@ -224,24 +344,38 @@
         pt: {
           label_nome: "Nome do Produto",
           placeholder_nome: "Ex: Trench Coat Milano",
-          label_img: "Link da Imagem",
+          label_img: "Link da Imagem do Produto",
           placeholder_img: "https://...",
           btn_gerar: "Gerar Página →",
           btn_limpar: "Limpar tudo",
           alert_vazio: "Preencha pelo menos um campo antes de gerar.",
+          img_validating: "Verificando imagem...",
+          img_ok: "✓ Imagem válida",
+          img_error:
+            "Este link não parece ser uma imagem válida. Use o link direto da imagem (ex: termina em .jpg, .png, .webp).",
+          img_error_load:
+            "Não foi possível carregar a imagem. Verifique se o link está correto e é de acesso público.",
         },
         en: {
           label_nome: "Product Name",
           placeholder_nome: "E.g: Milano Trench Coat",
-          label_img: "Image URL",
+          label_img: "Product Image URL",
           placeholder_img: "https://...",
           btn_gerar: "Generate Page →",
           btn_limpar: "Clear all",
           alert_vazio: "Please fill in at least one field before generating.",
+          img_validating: "Validating image...",
+          img_ok: "✓ Valid image",
+          img_error:
+            "This link doesn't seem to be a valid image. Please use a direct image URL (e.g. ending in .jpg, .png, .webp).",
+          img_error_load:
+            "Could not load the image. Please check that the URL is correct and publicly accessible.",
         },
       };
 
       let currentLang = localStorage.getItem("szb_lang") || "pt";
+      let imageValid = false;
+      let debounceTimer = null;
 
       function setLang(lang) {
         currentLang = lang;
@@ -262,31 +396,136 @@
           const k = el.getAttribute("data-i18n-placeholder");
           if (i18n[lang][k]) el.placeholder = i18n[lang][k];
         });
+        // Re-aplica msg de erro no idioma atual se já estiver visível
+        if (
+          document.getElementById("img-error").classList.contains("visible")
+        ) {
+          document.getElementById("img-error-text").textContent =
+            i18n[lang][lastErrorKey] || i18n[lang].img_error;
+        }
       }
 
       setLang(currentLang);
 
-      function previewLink() {
-        const url = document.getElementById("inp-imagem").value.trim();
-        const prev = document.getElementById("img-preview");
-        if (url) {
-          prev.src = url;
-          prev.style.display = "block";
-          prev.onerror = () => {
-            prev.style.display = "none";
-          };
+      let lastErrorKey = "img_error";
+
+      function setImageState(state, errorKey) {
+        const input = document.getElementById("inp-imagem");
+        const loading = document.getElementById("img-loading");
+        const error = document.getElementById("img-error");
+        const errTxt = document.getElementById("img-error-text");
+        const preview = document.getElementById("img-preview-wrap");
+        const btn = document.getElementById("btn-gerar");
+
+        loading.classList.remove("visible");
+        error.classList.remove("visible");
+        preview.classList.remove("visible");
+        input.classList.remove("input-error", "input-success");
+
+        if (state === "loading") {
+          loading.classList.add("visible");
+          imageValid = false;
+          btn.disabled = true;
+        } else if (state === "valid") {
+          preview.classList.add("visible");
+          input.classList.add("input-success");
+          imageValid = true;
+          btn.disabled = false;
+        } else if (state === "error") {
+          lastErrorKey = errorKey || "img_error";
+          errTxt.textContent = i18n[currentLang][lastErrorKey];
+          error.classList.add("visible");
+          input.classList.add("input-error");
+          imageValid = false;
+          btn.disabled = false; // não bloqueia — pode gerar sem imagem
         } else {
-          prev.style.display = "none";
+          // idle/vazio
+          imageValid = false;
+          btn.disabled = false;
         }
+      }
+
+      function validateImageUrl(url) {
+        // Tenta detectar se é um link de produto (não imagem) por padrões comuns
+        const productPatterns = [
+          /\/products?\//i,
+          /\/item\//i,
+          /\/p\//i,
+          /shopee\./i,
+          /mercadolivre\./i,
+          /amazon\./i,
+          /magalu\./i,
+          /americanas\./i,
+          /zalando\./i,
+          /\?(.*)(pid|sku|ref|id)=/i,
+        ];
+        for (const p of productPatterns) {
+          if (p.test(url)) return "product_page";
+        }
+
+        // Verifica extensão de imagem conhecida
+        const imgExtPattern =
+          /\.(jpg|jpeg|png|webp|gif|avif|svg|bmp|tiff?)(\?.*)?$/i;
+        if (imgExtPattern.test(url)) return "likely_image";
+
+        // Não tem extensão nem parece produto — vai tentar carregar mesmo assim
+        return "unknown";
+      }
+
+      function onImageInput() {
+        clearTimeout(debounceTimer);
+        const url = document.getElementById("inp-imagem").value.trim();
+
+        if (!url) {
+          setImageState("idle");
+          return;
+        }
+
+        // Valida se parece URL
+        try {
+          new URL(url);
+        } catch {
+          setImageState("error", "img_error");
+          return;
+        }
+
+        const hint = validateImageUrl(url);
+
+        if (hint === "product_page") {
+          setImageState("error", "img_error");
+          return;
+        }
+
+        // Debounce de 600ms antes de tentar carregar
+        debounceTimer = setTimeout(() => {
+          setImageState("loading");
+          const testImg = new Image();
+          testImg.onload = () => {
+            document.getElementById("img-preview").src = url;
+            setImageState("valid");
+          };
+          testImg.onerror = () => {
+            setImageState("error", "img_error_load");
+          };
+          testImg.src = url;
+        }, 600);
       }
 
       function gerar() {
         const nome = document.getElementById("inp-nome").value.trim();
         const img = document.getElementById("inp-imagem").value.trim();
+
         if (!nome && !img) {
           alert(i18n[currentLang].alert_vazio);
           return;
         }
+
+        // Bloqueia se há imagem preenchida mas inválida
+        if (img && !imageValid) {
+          document.getElementById("inp-imagem").focus();
+          return;
+        }
+
         const params = new URLSearchParams();
         if (nome) params.set("nome", nome);
         if (img) params.set("img", img);
@@ -297,9 +536,7 @@
       function limpar() {
         document.getElementById("inp-nome").value = "";
         document.getElementById("inp-imagem").value = "";
-        const prev = document.getElementById("img-preview");
-        prev.src = "";
-        prev.style.display = "none";
+        setImageState("idle");
       }
     </script>
   </body>
