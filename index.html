@@ -456,6 +456,37 @@
         font-size: 14px;
       }
 
+      /* Load more */
+      .catalog-footer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 24px 40px;
+      }
+      .btn-load-more {
+        padding: 12px 32px;
+        background: #fff;
+        color: #1a1a1a;
+        border: 1.5px solid #1a1a1a;
+        border-radius: 6px;
+        font-family: "Inter", sans-serif;
+        font-size: 12px;
+        font-weight: 500;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+      }
+      .btn-load-more:hover {
+        background: #1a1a1a;
+        color: #fff;
+      }
+      .catalog-pagination-info {
+        font-size: 12px;
+        color: #aaa;
+      }
+
       /* ── CLIENT SELECT VIEW ── */
       #view-client-select {
         align-items: center;
@@ -664,6 +695,17 @@
         </div>
       </div>
       <div class="catalog-grid" id="catalog-grid"></div>
+      <div class="catalog-footer" id="catalog-footer" style="display: none">
+        <div class="catalog-pagination-info" id="catalog-pagination-info"></div>
+        <button
+          class="btn-load-more"
+          id="btn-load-more"
+          onclick="loadMore()"
+          data-i18n="load_more"
+        >
+          Ver mais
+        </button>
+      </div>
     </div>
 
     <script>
@@ -697,6 +739,9 @@
           loading: "Carregando...",
           search_placeholder: "Buscar produto...",
           products_count: "produtos",
+          load_more: "Ver mais 50",
+          showing: "Mostrando",
+          of: "de",
         },
         en: {
           home_title: "How would you like to continue?",
@@ -726,11 +771,18 @@
           loading: "Loading...",
           search_placeholder: "Search product...",
           products_count: "products",
+          load_more: "Load 50 more",
+          showing: "Showing",
+          of: "of",
         },
       };
 
       let currentLang = localStorage.getItem("szb_lang") || "pt";
       let allProducts = [];
+      let filteredProducts = [];
+      let currentPage = 0;
+      const PAGE_SIZE = 50;
+      let searchDebounce = null;
 
       function setLang(lang) {
         currentLang = lang;
@@ -809,17 +861,22 @@
         document.getElementById(
           "catalog-grid"
         ).innerHTML = `<div class="loading-state">${i18n[currentLang].loading}</div>`;
+        document.getElementById("catalog-footer").style.display = "none";
+        document.getElementById("catalog-search-input").value = "";
 
         try {
           const res = await fetch(client.csv);
           const text = await res.text();
           allProducts = parseCSV(text);
+          filteredProducts = allProducts;
+          currentPage = 0;
 
           document.getElementById(
             "catalog-count"
           ).textContent = `${allProducts.length} ${i18n[currentLang].products_count}`;
 
-          renderCatalog(allProducts);
+          document.getElementById("catalog-grid").innerHTML = "";
+          appendPage();
         } catch {
           document.getElementById(
             "catalog-grid"
@@ -827,54 +884,97 @@
         }
       }
 
-      /* ── Render catalog grid ── */
-      function renderCatalog(products) {
+      /* ── Append one page of products to the grid ── */
+      function appendPage() {
         const grid = document.getElementById("catalog-grid");
-        if (!products.length) {
+        const start = currentPage * PAGE_SIZE;
+        const slice = filteredProducts.slice(start, start + PAGE_SIZE);
+
+        if (currentPage === 0 && !slice.length) {
           grid.innerHTML = `<div class="catalog-empty">Nenhum produto encontrado.</div>`;
+          document.getElementById("catalog-footer").style.display = "none";
           return;
         }
-        grid.innerHTML = products
-          .map((p, i) => {
-            const img = p.images ? p.images.split("|")[0] : "";
-            const cat = p.categoryName || p.feedCategoryName || "";
-            const name = p.name || p.nome || "";
-            return `
-            <div class="product-thumb" onclick="openProduct(${i})">
-              <div class="product-thumb-img">
-                ${
-                  img
-                    ? `<img src="${img}" alt="${name}" onerror="this.parentElement.innerHTML='👗'">`
-                    : "👗"
-                }
-              </div>
-              <div class="product-thumb-info">
-                ${cat ? `<div class="product-thumb-cat">${cat}</div>` : ""}
-                <div class="product-thumb-name">${name}</div>
-              </div>
+
+        slice.forEach((p, localIdx) => {
+          const globalIdx = start + localIdx;
+          const img = p.images ? p.images.split("|")[0] : "";
+          const cat = p.categoryName || p.feedCategoryName || "";
+          const name = p.name || p.nome || "";
+          const el = document.createElement("div");
+          el.className = "product-thumb";
+          el.onclick = () => openProduct(globalIdx);
+          el.innerHTML = `
+            <div class="product-thumb-img">
+              ${
+                img
+                  ? `<img src="${img}" alt="${name}" loading="lazy" onerror="this.parentElement.innerHTML='👗'">`
+                  : "👗"
+              }
+            </div>
+            <div class="product-thumb-info">
+              ${cat ? `<div class="product-thumb-cat">${cat}</div>` : ""}
+              <div class="product-thumb-name">${name}</div>
             </div>`;
-          })
-          .join("");
+          grid.appendChild(el);
+        });
+
+        currentPage++;
+        const shown = Math.min(
+          currentPage * PAGE_SIZE,
+          filteredProducts.length
+        );
+        const total = filteredProducts.length;
+        const footer = document.getElementById("catalog-footer");
+        const info = document.getElementById("catalog-pagination-info");
+        const btn = document.getElementById("btn-load-more");
+
+        info.textContent = `${i18n[currentLang].showing} ${shown} ${i18n[currentLang].of} ${total} ${i18n[currentLang].products_count}`;
+
+        if (shown < total) {
+          footer.style.display = "flex";
+          btn.style.display = "block";
+          btn.textContent = i18n[currentLang].load_more;
+        } else {
+          btn.style.display = "none";
+          // mostra info mesmo sem botão se há produtos
+          footer.style.display = total > PAGE_SIZE ? "flex" : "none";
+        }
       }
 
-      /* ── Search filter ── */
+      /* ── Load more ── */
+      function loadMore() {
+        appendPage();
+      }
+
+      /* ── Search filter with debounce ── */
       function filterCatalog() {
-        const q = document
-          .getElementById("catalog-search-input")
-          .value.toLowerCase();
-        const filtered = q
-          ? allProducts.filter(
-              (p) =>
-                (p.name || p.nome || "").toLowerCase().includes(q) ||
-                (p.categoryName || "").toLowerCase().includes(q)
-            )
-          : allProducts;
-        renderCatalog(filtered);
+        clearTimeout(searchDebounce);
+        searchDebounce = setTimeout(() => {
+          const q = document
+            .getElementById("catalog-search-input")
+            .value.toLowerCase()
+            .trim();
+          filteredProducts = q
+            ? allProducts.filter(
+                (p) =>
+                  (p.name || p.nome || "").toLowerCase().includes(q) ||
+                  (p.categoryName || "").toLowerCase().includes(q)
+              )
+            : allProducts;
+
+          currentPage = 0;
+          document.getElementById("catalog-grid").innerHTML = "";
+          document.getElementById(
+            "catalog-count"
+          ).textContent = `${filteredProducts.length} ${i18n[currentLang].products_count}`;
+          appendPage();
+        }, 300);
       }
 
       /* ── Open individual product ── */
       function openProduct(index) {
-        const p = allProducts[index];
+        const p = filteredProducts[index];
         const nome = p.name || p.nome || "";
         const img = p.images ? p.images.split("|")[0] : "";
         const params = new URLSearchParams();
