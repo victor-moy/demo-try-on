@@ -428,8 +428,8 @@
         flex-wrap: wrap;
       }
       .catalog-client-logo {
-        height: 28px;
-        max-width: 100px;
+        height: 36px;
+        max-width: 140px;
         object-fit: contain;
         display: block;
       }
@@ -699,7 +699,6 @@
           alt=""
           style="display: none"
         />
-        <h2 id="catalog-client-name"></h2>
         <span class="client-badge" id="catalog-count"></span>
         <div class="catalog-search">
           <input
@@ -946,8 +945,6 @@
 
       async function loadCatalog(client) {
         currentClient = client;
-        document.getElementById("catalog-client-name").textContent =
-          client.name;
 
         // logo no header do catálogo
         const logoEl = document.getElementById("catalog-client-logo");
