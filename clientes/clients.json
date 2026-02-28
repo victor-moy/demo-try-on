@@ -4,5 +4,11 @@
     "name": "Carmen Steffens",
     "logo": "https://upload.wikimedia.org/wikipedia/commons/2/27/Carmen-steffens.png",
     "csv": "clientes/carmen-steffens.csv"
+  },
+  {
+    "id": "in-love",
+    "name": "In Love",
+    "logo": "https://adaptive-images.uooucdn.com.br/tr:w-200,h-55,c-at_max,pr-true,q-90/a22495-ogxytngyqt0/s/4c/55/e2/c2ac4dad9075da0694a7766ce3.svg",
+    "csv": "clientes/in-love.csv"
   }
 ]
