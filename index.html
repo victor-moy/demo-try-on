@@ -34,6 +34,7 @@
       .logo img {
         height: 26px;
         display: block;
+        cursor: pointer;
       }
       .nav-right {
         display: flex;
@@ -103,7 +104,6 @@
         color: #888;
         margin-bottom: 36px;
       }
-
       .path-cards {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -114,7 +114,6 @@
           grid-template-columns: 1fr;
         }
       }
-
       .path-card {
         background: #fff;
         border-radius: 10px;
@@ -196,7 +195,6 @@
       input.input-success {
         border-color: #38a169 !important;
       }
-
       .field-error {
         display: none;
         align-items: flex-start;
@@ -220,7 +218,6 @@
         color: #c53030;
         line-height: 1.5;
       }
-
       .img-preview-wrap {
         position: relative;
         margin-top: 4px;
@@ -248,7 +245,6 @@
         padding: 3px 8px;
         border-radius: 10px;
       }
-
       .img-loading {
         display: none;
         align-items: center;
@@ -274,7 +270,6 @@
           transform: rotate(360deg);
         }
       }
-
       .btn-primary {
         width: 100%;
         padding: 14px;
@@ -335,26 +330,117 @@
         color: #1a1a1a;
       }
 
+      /* ── CLIENT SELECT ── */
+      #view-client-select {
+        align-items: center;
+        justify-content: center;
+        padding: 40px 24px;
+      }
+      .client-list {
+        width: 100%;
+        max-width: 560px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .client-select-title {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+      .client-select-sub {
+        font-size: 12px;
+        color: #999;
+        margin-bottom: 20px;
+      }
+
+      /* client cards grid */
+      .client-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 12px;
+      }
+      .client-card {
+        background: #fff;
+        border-radius: 10px;
+        border: 1.5px solid #e8e8e8;
+        padding: 20px 16px;
+        cursor: pointer;
+        transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        text-align: center;
+      }
+      .client-card:hover {
+        border-color: #1a1a1a;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        transform: translateY(-2px);
+      }
+      .client-logo-wrap {
+        width: 80px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+      .client-logo-wrap img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        display: block;
+      }
+      .client-logo-placeholder {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        color: #aaa;
+      }
+      .client-card-name {
+        font-size: 13px;
+        font-weight: 500;
+        color: #1a1a1a;
+      }
+
+      .loading-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #aaa;
+        font-size: 13px;
+      }
+
       /* ── CATALOG VIEW ── */
       #view-catalog {
         padding: 0;
         flex-direction: column;
       }
-
       .catalog-header {
         background: #fff;
         border-bottom: 1px solid #e8e8e8;
-        padding: 20px 24px;
+        padding: 16px 24px;
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: 12px;
         flex-wrap: wrap;
+      }
+      .catalog-client-logo {
+        height: 28px;
+        max-width: 100px;
+        object-fit: contain;
+        display: block;
       }
       .catalog-header h2 {
         font-size: 15px;
         font-weight: 600;
       }
-      .catalog-header .client-badge {
+      .client-badge {
         font-size: 11px;
         background: #f0f0f0;
         padding: 4px 10px;
@@ -362,13 +448,11 @@
         color: #555;
         font-weight: 500;
       }
-
       .catalog-search {
         margin-left: auto;
-        position: relative;
       }
       .catalog-search input {
-        padding: 8px 12px 8px 32px;
+        padding: 8px 14px;
         border: 1px solid #e0e0e0;
         border-radius: 6px;
         font-family: "Inter", sans-serif;
@@ -382,15 +466,6 @@
         border-color: #1a1a1a;
         background: #fff;
       }
-      .catalog-search-icon {
-        position: absolute;
-        left: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 13px;
-        color: #aaa;
-        pointer-events: none;
-      }
 
       .catalog-grid {
         padding: 24px;
@@ -401,7 +476,6 @@
         margin: 0 auto;
         width: 100%;
       }
-
       .product-thumb {
         background: #fff;
         border-radius: 8px;
@@ -434,20 +508,12 @@
       .product-thumb-info {
         padding: 10px 12px 14px;
       }
-      .product-thumb-cat {
-        font-size: 10px;
-        color: #999;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: 4px;
-      }
       .product-thumb-name {
         font-size: 13px;
         font-weight: 500;
         line-height: 1.3;
         color: #1a1a1a;
       }
-
       .catalog-empty {
         grid-column: 1/-1;
         text-align: center;
@@ -487,48 +553,6 @@
         color: #aaa;
       }
 
-      /* ── CLIENT SELECT VIEW ── */
-      #view-client-select {
-        align-items: center;
-        justify-content: center;
-        padding: 40px 24px;
-      }
-      .client-list {
-        width: 100%;
-        max-width: 480px;
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-      }
-      .client-item {
-        background: #fff;
-        border-radius: 10px;
-        border: 1.5px solid #e8e8e8;
-        padding: 18px 20px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        transition: border-color 0.2s, box-shadow 0.2s;
-        font-size: 14px;
-        font-weight: 500;
-      }
-      .client-item:hover {
-        border-color: #1a1a1a;
-        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
-      }
-      .client-item-arrow {
-        color: #ccc;
-        font-size: 16px;
-      }
-
-      .loading-state {
-        text-align: center;
-        padding: 60px 20px;
-        color: #aaa;
-        font-size: 13px;
-      }
-
       @media (max-width: 480px) {
         .card {
           padding: 28px 20px;
@@ -542,7 +566,7 @@
   </head>
   <body>
     <nav>
-      <a href="#" class="logo" onclick="showView('home'); return false;">
+      <a class="logo" onclick="navigate('home')" href="#">
         <img
           src="https://sizebay.com/wp-content/uploads/2025/10/logo-sizebay-atualizado.svg"
           alt="Sizebay"
@@ -567,7 +591,7 @@
           Escolha uma das opções abaixo para começar a demo
         </div>
         <div class="path-cards">
-          <div class="path-card" onclick="showView('form')">
+          <div class="path-card" onclick="navigate('form')">
             <div class="path-icon">✏️</div>
             <div class="path-title" data-i18n="path_demo_title">
               Demo rápida
@@ -577,7 +601,7 @@
               TryOn.
             </div>
           </div>
-          <div class="path-card" onclick="showView('client-select')">
+          <div class="path-card" onclick="navigate('clients')">
             <div class="path-icon">🏬</div>
             <div class="path-title" data-i18n="path_client_title">
               Já sou cliente
@@ -593,7 +617,7 @@
     <!-- FORM -->
     <div id="view-form" class="view">
       <div class="card">
-        <button class="btn-back" onclick="showView('home')">
+        <button class="btn-back" onclick="navigate('home')">
           ← <span data-i18n="back">Voltar</span>
         </button>
         <div class="field">
@@ -648,25 +672,19 @@
       <div class="client-list" style="margin-top: 40px">
         <button
           class="btn-back"
-          onclick="showView('home')"
-          style="margin-bottom: 8px"
+          onclick="navigate('home')"
+          style="margin-bottom: 16px"
         >
           ← <span data-i18n="back">Voltar</span>
         </button>
-        <div
-          style="font-size: 15px; font-weight: 600; margin-bottom: 4px"
-          data-i18n="select_client"
-        >
+        <div class="client-select-title" data-i18n="select_client">
           Selecione o cliente
         </div>
-        <div
-          style="font-size: 12px; color: #999; margin-bottom: 20px"
-          data-i18n="select_client_sub"
-        >
+        <div class="client-select-sub" data-i18n="select_client_sub">
           Carregue o catálogo de produtos
         </div>
-        <div id="client-list-items" class="loading-state" data-i18n="loading">
-          Carregando...
+        <div id="client-cards-wrap">
+          <div class="loading-state" data-i18n="loading">Carregando...</div>
         </div>
       </div>
     </div>
@@ -676,15 +694,21 @@
       <div class="catalog-header">
         <button
           class="btn-back"
-          onclick="showView('client-select')"
+          onclick="navigate('clients')"
           style="margin: 0"
         >
           ←
         </button>
+        <img
+          id="catalog-client-logo"
+          class="catalog-client-logo"
+          src=""
+          alt=""
+          style="display: none"
+        />
         <h2 id="catalog-client-name"></h2>
         <span class="client-badge" id="catalog-count"></span>
         <div class="catalog-search">
-          <span class="catalog-search-icon">🔍</span>
           <input
             type="text"
             id="catalog-search-input"
@@ -703,13 +727,15 @@
           onclick="loadMore()"
           data-i18n="load_more"
         >
-          Ver mais
+          Ver mais 50
         </button>
       </div>
     </div>
 
     <script>
-      /* ── i18n ── */
+      /* ════════════════════════════════
+         i18n
+      ════════════════════════════════ */
       const i18n = {
         pt: {
           home_title: "Como deseja continuar?",
@@ -777,14 +803,63 @@
         },
       };
 
-      let currentLang = localStorage.getItem("szb_lang") || "pt";
-      let allProducts = [];
-      let filteredProducts = [];
-      let currentPage = 0;
-      const PAGE_SIZE = 50;
-      let searchDebounce = null;
+      /* ════════════════════════════════
+         URL routing
+         Rotas suportadas via ?view=
+           home | form | clients | catalog&client=ID
+      ════════════════════════════════ */
+      let currentLang =
+        new URLSearchParams(location.search).get("lang") ||
+        localStorage.getItem("szb_lang") ||
+        "pt";
 
-      function setLang(lang) {
+      function getURLParams() {
+        return new URLSearchParams(location.search);
+      }
+
+      function pushState(params) {
+        window.history.pushState({}, "", "?" + params.toString());
+      }
+
+      function navigate(view, extra = {}) {
+        const p = new URLSearchParams();
+        p.set("view", view);
+        p.set("lang", currentLang);
+        Object.entries(extra).forEach(([k, v]) => p.set(k, v));
+        pushState(p);
+        applyView(view, extra);
+      }
+
+      function applyView(view, extra = {}) {
+        document
+          .querySelectorAll(".view")
+          .forEach((v) => v.classList.remove("active"));
+        const mapping = {
+          home: "view-home",
+          form: "view-form",
+          clients: "view-client-select",
+          catalog: "view-catalog",
+        };
+        const el = document.getElementById(mapping[view] || "view-home");
+        if (el) el.classList.add("active");
+
+        if (view === "clients") loadClientList();
+        if (view === "catalog" && extra.client) loadCatalogById(extra.client);
+      }
+
+      // Handle browser back/forward
+      window.addEventListener("popstate", () => {
+        const p = getURLParams();
+        const view = p.get("view") || "home";
+        const lang = p.get("lang");
+        if (lang) setLang(lang, false);
+        applyView(view, { client: p.get("client") });
+      });
+
+      /* ════════════════════════════════
+         Lang
+      ════════════════════════════════ */
+      function setLang(lang, updateURL = true) {
         currentLang = lang;
         localStorage.setItem("szb_lang", lang);
         document
@@ -803,43 +878,124 @@
           const k = el.getAttribute("data-i18n-placeholder");
           if (i18n[lang][k]) el.placeholder = i18n[lang][k];
         });
-      }
-      setLang(currentLang);
-
-      /* ── View routing ── */
-      function showView(id) {
-        document
-          .querySelectorAll(".view")
-          .forEach((v) => v.classList.remove("active"));
-        document.getElementById("view-" + id).classList.add("active");
-        if (id === "client-select") loadClientList();
-      }
-
-      /* ── Client list ── */
-      async function loadClientList() {
-        const container = document.getElementById("client-list-items");
-        container.innerHTML = `<div class="loading-state">${i18n[currentLang].loading}</div>`;
-        try {
-          const res = await fetch("clientes/clients.json");
-          const clients = await res.json();
-          container.innerHTML = "";
-          container.style.cssText = "";
-          clients.forEach((client) => {
-            const el = document.createElement("div");
-            el.className = "client-item";
-            el.innerHTML = `<span>${client.name}</span><span class="client-item-arrow">→</span>`;
-            el.onclick = () => loadCatalog(client);
-            container.appendChild(el);
-          });
-        } catch {
-          container.innerHTML = `<div class="loading-state">Erro ao carregar clientes.</div>`;
+        if (updateURL) {
+          const p = getURLParams();
+          p.set("lang", lang);
+          window.history.replaceState({}, "", "?" + p.toString());
         }
       }
 
-      /* ── CSV parser (TSV support) ── */
+      /* ════════════════════════════════
+         Client list
+      ════════════════════════════════ */
+      let clientsData = [];
+
+      async function loadClientList() {
+        const wrap = document.getElementById("client-cards-wrap");
+        if (clientsData.length) {
+          renderClientCards();
+          return;
+        }
+        wrap.innerHTML = `<div class="loading-state">${i18n[currentLang].loading}</div>`;
+        try {
+          const res = await fetch("clientes/clients.json");
+          clientsData = await res.json();
+          renderClientCards();
+        } catch {
+          wrap.innerHTML = `<div class="loading-state">Erro ao carregar clientes.</div>`;
+        }
+      }
+
+      function renderClientCards() {
+        const wrap = document.getElementById("client-cards-wrap");
+        wrap.innerHTML = `<div class="client-cards"></div>`;
+        const grid = wrap.querySelector(".client-cards");
+        clientsData.forEach((client) => {
+          const el = document.createElement("div");
+          el.className = "client-card";
+          el.innerHTML = `
+            <div class="client-logo-wrap">
+              ${
+                client.logo
+                  ? `<img src="${client.logo}" alt="${client.name}" onerror="this.parentElement.innerHTML='<div class=\\'client-logo-placeholder\\'>🏬</div>'">`
+                  : `<div class="client-logo-placeholder">🏬</div>`
+              }
+            </div>
+            <div class="client-card-name">${client.name}</div>`;
+          el.onclick = () => navigate("catalog", { client: client.id });
+          grid.appendChild(el);
+        });
+      }
+
+      /* ════════════════════════════════
+         Catalog
+      ════════════════════════════════ */
+      let allProducts = [];
+      let filteredProducts = [];
+      let currentPage = 0;
+      const PAGE_SIZE = 50;
+      let searchDebounce = null;
+      let currentClient = null;
+
+      async function loadCatalogById(clientId) {
+        const client = clientsData.find((c) => c.id === clientId);
+        if (!client) {
+          // clientsData ainda não carregou (acesso direto via URL)
+          try {
+            const res = await fetch("clientes/clients.json");
+            clientsData = await res.json();
+          } catch {
+            return;
+          }
+        }
+        const c = clientsData.find((c) => c.id === clientId);
+        if (c) loadCatalog(c);
+      }
+
+      async function loadCatalog(client) {
+        currentClient = client;
+        document.getElementById("catalog-client-name").textContent =
+          client.name;
+
+        // logo no header do catálogo
+        const logoEl = document.getElementById("catalog-client-logo");
+        if (client.logo) {
+          logoEl.src = client.logo;
+          logoEl.style.display = "block";
+          logoEl.onerror = () => {
+            logoEl.style.display = "none";
+          };
+        } else {
+          logoEl.style.display = "none";
+        }
+
+        document.getElementById(
+          "catalog-grid"
+        ).innerHTML = `<div class="loading-state">${i18n[currentLang].loading}</div>`;
+        document.getElementById("catalog-footer").style.display = "none";
+        document.getElementById("catalog-search-input").value = "";
+
+        try {
+          const res = await fetch(client.csv);
+          const text = await res.text();
+          allProducts = parseCSV(text);
+          filteredProducts = allProducts;
+          currentPage = 0;
+          document.getElementById(
+            "catalog-count"
+          ).textContent = `${allProducts.length} ${i18n[currentLang].products_count}`;
+          document.getElementById("catalog-grid").innerHTML = "";
+          appendPage();
+        } catch {
+          document.getElementById(
+            "catalog-grid"
+          ).innerHTML = `<div class="catalog-empty">Erro ao carregar catálogo.</div>`;
+        }
+      }
+
+      /* ── CSV / TSV parser ── */
       function parseCSV(text) {
         const lines = text.trim().split("\n");
-        // detecta separador: tab ou vírgula
         const sep = lines[0].includes("\t") ? "\t" : ",";
         const headers = lines[0].split(sep).map((h) => h.trim());
         return lines
@@ -853,38 +1009,7 @@
           .filter((r) => r.name || r.nome);
       }
 
-      /* ── Load catalog ── */
-      async function loadCatalog(client) {
-        showView("catalog");
-        document.getElementById("catalog-client-name").textContent =
-          client.name;
-        document.getElementById(
-          "catalog-grid"
-        ).innerHTML = `<div class="loading-state">${i18n[currentLang].loading}</div>`;
-        document.getElementById("catalog-footer").style.display = "none";
-        document.getElementById("catalog-search-input").value = "";
-
-        try {
-          const res = await fetch(client.csv);
-          const text = await res.text();
-          allProducts = parseCSV(text);
-          filteredProducts = allProducts;
-          currentPage = 0;
-
-          document.getElementById(
-            "catalog-count"
-          ).textContent = `${allProducts.length} ${i18n[currentLang].products_count}`;
-
-          document.getElementById("catalog-grid").innerHTML = "";
-          appendPage();
-        } catch {
-          document.getElementById(
-            "catalog-grid"
-          ).innerHTML = `<div class="catalog-empty">Erro ao carregar catálogo.</div>`;
-        }
-      }
-
-      /* ── Append one page of products to the grid ── */
+      /* ── Append page ── */
       function appendPage() {
         const grid = document.getElementById("catalog-grid");
         const start = currentPage * PAGE_SIZE;
@@ -899,7 +1024,6 @@
         slice.forEach((p, localIdx) => {
           const globalIdx = start + localIdx;
           const img = p.images ? p.images.split("|")[0] : "";
-          const cat = p.categoryName || p.feedCategoryName || "";
           const name = p.name || p.nome || "";
           const el = document.createElement("div");
           el.className = "product-thumb";
@@ -913,7 +1037,6 @@
               }
             </div>
             <div class="product-thumb-info">
-              ${cat ? `<div class="product-thumb-cat">${cat}</div>` : ""}
               <div class="product-thumb-name">${name}</div>
             </div>`;
           grid.appendChild(el);
@@ -937,17 +1060,15 @@
           btn.textContent = i18n[currentLang].load_more;
         } else {
           btn.style.display = "none";
-          // mostra info mesmo sem botão se há produtos
           footer.style.display = total > PAGE_SIZE ? "flex" : "none";
         }
       }
 
-      /* ── Load more ── */
       function loadMore() {
         appendPage();
       }
 
-      /* ── Search filter with debounce ── */
+      /* ── Search ── */
       function filterCatalog() {
         clearTimeout(searchDebounce);
         searchDebounce = setTimeout(() => {
@@ -956,13 +1077,10 @@
             .value.toLowerCase()
             .trim();
           filteredProducts = q
-            ? allProducts.filter(
-                (p) =>
-                  (p.name || p.nome || "").toLowerCase().includes(q) ||
-                  (p.categoryName || "").toLowerCase().includes(q)
+            ? allProducts.filter((p) =>
+                (p.name || p.nome || "").toLowerCase().includes(q)
               )
             : allProducts;
-
           currentPage = 0;
           document.getElementById("catalog-grid").innerHTML = "";
           document.getElementById(
@@ -972,7 +1090,7 @@
         }, 300);
       }
 
-      /* ── Open individual product ── */
+      /* ── Open product ── */
       function openProduct(index) {
         const p = filteredProducts[index];
         const nome = p.name || p.nome || "";
@@ -984,7 +1102,9 @@
         window.open("produto.html?" + params.toString(), "_blank");
       }
 
-      /* ── Quick demo form ── */
+      /* ════════════════════════════════
+         Quick demo form
+      ════════════════════════════════ */
       let imageValid = false;
       let debounceTimer = null;
       let lastErrorKey = "img_error";
@@ -1023,7 +1143,7 @@
       }
 
       function validateImageUrl(url) {
-        const productPatterns = [
+        const pp = [
           /\/products?\//i,
           /\/item\//i,
           /\/p\//i,
@@ -1035,7 +1155,7 @@
           /zalando\./i,
           /\?(.*)(pid|sku|ref|id)=/i,
         ];
-        for (const p of productPatterns) if (p.test(url)) return "product_page";
+        for (const p of pp) if (p.test(url)) return "product_page";
         if (/\.(jpg|jpeg|png|webp|gif|avif|svg|bmp|tiff?)(\?.*)?$/i.test(url))
           return "likely_image";
         return "unknown";
@@ -1060,13 +1180,13 @@
         }
         debounceTimer = setTimeout(() => {
           setImageState("loading");
-          const testImg = new Image();
-          testImg.onload = () => {
+          const t = new Image();
+          t.onload = () => {
             document.getElementById("img-preview").src = url;
             setImageState("valid");
           };
-          testImg.onerror = () => setImageState("error", "img_error_load");
-          testImg.src = url;
+          t.onerror = () => setImageState("error", "img_error_load");
+          t.src = url;
         }, 600);
       }
 
@@ -1093,6 +1213,26 @@
         document.getElementById("inp-imagem").value = "";
         setImageState("idle");
       }
+
+      /* ════════════════════════════════
+         Boot — lê URL e inicializa
+      ════════════════════════════════ */
+      (function boot() {
+        const p = getURLParams();
+        const view = p.get("view") || "home";
+        const lang = p.get("lang");
+        if (lang) currentLang = lang;
+        setLang(currentLang, false);
+
+        // Garante que a URL sempre tem lang
+        if (!p.get("lang")) {
+          p.set("lang", currentLang);
+          if (!p.get("view")) p.set("view", "home");
+          window.history.replaceState({}, "", "?" + p.toString());
+        }
+
+        applyView(view, { client: p.get("client") });
+      })();
     </script>
   </body>
 </html>

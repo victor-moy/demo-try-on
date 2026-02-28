@@ -2,6 +2,7 @@
   {
     "id": "carmen-steffens",
     "name": "Carmen Steffens",
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Carmen_Steffens_logo.svg/320px-Carmen_Steffens_logo.svg.png",
     "csv": "clientes/carmen-steffens.csv"
   }
 ]
