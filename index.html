@@ -22,6 +22,7 @@
         display: flex;
         flex-direction: column;
       }
+
       nav {
         padding: 16px 24px;
         background: #fff;
@@ -71,9 +72,80 @@
         background: #1a1a1a;
         color: #fff;
       }
-      .container {
+
+      /* ── VIEWS ── */
+      .view {
+        display: none;
         flex: 1;
+      }
+      .view.active {
         display: flex;
+        flex-direction: column;
+      }
+
+      /* ── HOME ── */
+      #view-home {
+        align-items: center;
+        justify-content: center;
+        padding: 48px 24px;
+      }
+      .home-inner {
+        width: 100%;
+        max-width: 560px;
+      }
+      .home-title {
+        font-size: 22px;
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+      .home-sub {
+        font-size: 14px;
+        color: #888;
+        margin-bottom: 36px;
+      }
+
+      .path-cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+      }
+      @media (max-width: 520px) {
+        .path-cards {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .path-card {
+        background: #fff;
+        border-radius: 10px;
+        border: 1.5px solid #e8e8e8;
+        padding: 28px 24px;
+        cursor: pointer;
+        transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .path-card:hover {
+        border-color: #1a1a1a;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transform: translateY(-2px);
+      }
+      .path-icon {
+        font-size: 28px;
+      }
+      .path-title {
+        font-size: 15px;
+        font-weight: 600;
+      }
+      .path-desc {
+        font-size: 12px;
+        color: #888;
+        line-height: 1.5;
+      }
+
+      /* ── FORM VIEW ── */
+      #view-form {
         align-items: center;
         justify-content: center;
         padding: 40px 24px;
@@ -101,7 +173,6 @@
         text-transform: uppercase;
         letter-spacing: 0.8px;
       }
-
       input[type="text"] {
         width: 100%;
         padding: 11px 14px;
@@ -111,7 +182,7 @@
         font-size: 14px;
         color: #1a1a1a;
         background: #fafafa;
-        transition: border-color 0.2s, background 0.2s;
+        transition: border-color 0.2s;
         outline: none;
       }
       input[type="text"]:focus {
@@ -126,7 +197,6 @@
         border-color: #38a169 !important;
       }
 
-      /* Mensagem de erro */
       .field-error {
         display: none;
         align-items: flex-start;
@@ -151,7 +221,6 @@
         line-height: 1.5;
       }
 
-      /* Preview da imagem */
       .img-preview-wrap {
         position: relative;
         margin-top: 4px;
@@ -178,10 +247,8 @@
         font-weight: 500;
         padding: 3px 8px;
         border-radius: 10px;
-        letter-spacing: 0.5px;
       }
 
-      /* Loading spinner */
       .img-loading {
         display: none;
         align-items: center;
@@ -208,7 +275,7 @@
         }
       }
 
-      .btn-gerar {
+      .btn-primary {
         width: 100%;
         padding: 14px;
         background: #1a1a1a;
@@ -222,20 +289,19 @@
         text-transform: uppercase;
         cursor: pointer;
         transition: background 0.2s, transform 0.1s;
-        margin-top: 4px;
       }
-      .btn-gerar:hover {
+      .btn-primary:hover {
         background: #333;
       }
-      .btn-gerar:active {
+      .btn-primary:active {
         transform: scale(0.98);
       }
-      .btn-gerar:disabled {
+      .btn-primary:disabled {
         background: #ccc;
         cursor: not-allowed;
         transform: none;
       }
-      .btn-limpar {
+      .btn-secondary {
         width: 100%;
         padding: 10px;
         background: transparent;
@@ -247,20 +313,205 @@
         cursor: pointer;
         transition: all 0.2s;
       }
-      .btn-limpar:hover {
+      .btn-secondary:hover {
         border-color: #aaa;
         color: #555;
       }
+      .btn-back {
+        background: none;
+        border: none;
+        font-family: "Inter", sans-serif;
+        font-size: 12px;
+        color: #999;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 0;
+        transition: color 0.2s;
+        margin-bottom: 4px;
+      }
+      .btn-back:hover {
+        color: #1a1a1a;
+      }
+
+      /* ── CATALOG VIEW ── */
+      #view-catalog {
+        padding: 0;
+        flex-direction: column;
+      }
+
+      .catalog-header {
+        background: #fff;
+        border-bottom: 1px solid #e8e8e8;
+        padding: 20px 24px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .catalog-header h2 {
+        font-size: 15px;
+        font-weight: 600;
+      }
+      .catalog-header .client-badge {
+        font-size: 11px;
+        background: #f0f0f0;
+        padding: 4px 10px;
+        border-radius: 20px;
+        color: #555;
+        font-weight: 500;
+      }
+
+      .catalog-search {
+        margin-left: auto;
+        position: relative;
+      }
+      .catalog-search input {
+        padding: 8px 12px 8px 32px;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        font-family: "Inter", sans-serif;
+        font-size: 13px;
+        outline: none;
+        background: #fafafa;
+        width: 200px;
+        transition: border-color 0.2s;
+      }
+      .catalog-search input:focus {
+        border-color: #1a1a1a;
+        background: #fff;
+      }
+      .catalog-search-icon {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 13px;
+        color: #aaa;
+        pointer-events: none;
+      }
+
+      .catalog-grid {
+        padding: 24px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 16px;
+        max-width: 1100px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .product-thumb {
+        background: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1.5px solid #e8e8e8;
+        cursor: pointer;
+        transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+      }
+      .product-thumb:hover {
+        border-color: #1a1a1a;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+      }
+      .product-thumb-img {
+        aspect-ratio: 3/4;
+        background: #ececec;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+        color: #ccc;
+      }
+      .product-thumb-img img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .product-thumb-info {
+        padding: 10px 12px 14px;
+      }
+      .product-thumb-cat {
+        font-size: 10px;
+        color: #999;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 4px;
+      }
+      .product-thumb-name {
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 1.3;
+        color: #1a1a1a;
+      }
+
+      .catalog-empty {
+        grid-column: 1/-1;
+        text-align: center;
+        padding: 60px 20px;
+        color: #bbb;
+        font-size: 14px;
+      }
+
+      /* ── CLIENT SELECT VIEW ── */
+      #view-client-select {
+        align-items: center;
+        justify-content: center;
+        padding: 40px 24px;
+      }
+      .client-list {
+        width: 100%;
+        max-width: 480px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .client-item {
+        background: #fff;
+        border-radius: 10px;
+        border: 1.5px solid #e8e8e8;
+        padding: 18px 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .client-item:hover {
+        border-color: #1a1a1a;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+      }
+      .client-item-arrow {
+        color: #ccc;
+        font-size: 16px;
+      }
+
+      .loading-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #aaa;
+        font-size: 13px;
+      }
+
       @media (max-width: 480px) {
         .card {
           padding: 28px 20px;
+        }
+        .catalog-grid {
+          grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+          padding: 16px;
         }
       }
     </style>
   </head>
   <body>
     <nav>
-      <a href="#" class="logo">
+      <a href="#" class="logo" onclick="showView('home'); return false;">
         <img
           src="https://sizebay.com/wp-content/uploads/2025/10/logo-sizebay-atualizado.svg"
           alt="Sizebay"
@@ -275,8 +526,45 @@
       </div>
     </nav>
 
-    <div class="container">
+    <!-- HOME -->
+    <div id="view-home" class="view active">
+      <div class="home-inner">
+        <div class="home-title" data-i18n="home_title">
+          Como deseja continuar?
+        </div>
+        <div class="home-sub" data-i18n="home_sub">
+          Escolha uma das opções abaixo para começar a demo
+        </div>
+        <div class="path-cards">
+          <div class="path-card" onclick="showView('form')">
+            <div class="path-icon">✏️</div>
+            <div class="path-title" data-i18n="path_demo_title">
+              Demo rápida
+            </div>
+            <div class="path-desc" data-i18n="path_demo_desc">
+              Preencha nome e imagem de um produto manualmente e visualize o
+              TryOn.
+            </div>
+          </div>
+          <div class="path-card" onclick="showView('client-select')">
+            <div class="path-icon">🏬</div>
+            <div class="path-title" data-i18n="path_client_title">
+              Já sou cliente
+            </div>
+            <div class="path-desc" data-i18n="path_client_desc">
+              Selecione seu catálogo de produtos e explore o TryOn em cada item.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM -->
+    <div id="view-form" class="view">
       <div class="card">
+        <button class="btn-back" onclick="showView('home')">
+          ← <span data-i18n="back">Voltar</span>
+        </button>
         <div class="field">
           <label data-i18n="label_nome">Nome do Produto</label>
           <input
@@ -286,9 +574,8 @@
             placeholder="Ex: Trench Coat Milano"
           />
         </div>
-
         <div class="field">
-          <label data-i18n="label_img">Link da Imagem do Produto</label>
+          <label data-i18n="label_img">Link da Imagem</label>
           <input
             type="text"
             id="inp-imagem"
@@ -296,27 +583,14 @@
             placeholder="https://..."
             oninput="onImageInput()"
           />
-
-          <!-- Loading -->
           <div class="img-loading" id="img-loading">
             <div class="spinner"></div>
             <span data-i18n="img_validating">Verificando imagem...</span>
           </div>
-
-          <!-- Erro -->
           <div class="field-error" id="img-error">
             <span class="field-error-icon">⚠️</span>
-            <span
-              class="field-error-text"
-              id="img-error-text"
-              data-i18n="img_error"
-            >
-              Este link não parece ser uma imagem válida. Por favor, use o link
-              direto da imagem (deve terminar em .jpg, .png, .webp, etc).
-            </span>
+            <span class="field-error-text" id="img-error-text"></span>
           </div>
-
-          <!-- Preview -->
           <div class="img-preview-wrap" id="img-preview-wrap">
             <img id="img-preview" class="img-preview" alt="Preview" />
             <span class="img-preview-badge" data-i18n="img_ok"
@@ -324,27 +598,90 @@
             >
           </div>
         </div>
-
         <button
-          class="btn-gerar"
+          class="btn-primary"
           id="btn-gerar"
           onclick="gerar()"
           data-i18n="btn_gerar"
         >
           Gerar Página →
         </button>
-        <button class="btn-limpar" onclick="limpar()" data-i18n="btn_limpar">
+        <button class="btn-secondary" onclick="limpar()" data-i18n="btn_limpar">
           Limpar tudo
         </button>
       </div>
     </div>
 
+    <!-- CLIENT SELECT -->
+    <div id="view-client-select" class="view">
+      <div class="client-list" style="margin-top: 40px">
+        <button
+          class="btn-back"
+          onclick="showView('home')"
+          style="margin-bottom: 8px"
+        >
+          ← <span data-i18n="back">Voltar</span>
+        </button>
+        <div
+          style="font-size: 15px; font-weight: 600; margin-bottom: 4px"
+          data-i18n="select_client"
+        >
+          Selecione o cliente
+        </div>
+        <div
+          style="font-size: 12px; color: #999; margin-bottom: 20px"
+          data-i18n="select_client_sub"
+        >
+          Carregue o catálogo de produtos
+        </div>
+        <div id="client-list-items" class="loading-state" data-i18n="loading">
+          Carregando...
+        </div>
+      </div>
+    </div>
+
+    <!-- CATALOG -->
+    <div id="view-catalog" class="view">
+      <div class="catalog-header">
+        <button
+          class="btn-back"
+          onclick="showView('client-select')"
+          style="margin: 0"
+        >
+          ←
+        </button>
+        <h2 id="catalog-client-name"></h2>
+        <span class="client-badge" id="catalog-count"></span>
+        <div class="catalog-search">
+          <span class="catalog-search-icon">🔍</span>
+          <input
+            type="text"
+            id="catalog-search-input"
+            data-i18n-placeholder="search_placeholder"
+            placeholder="Buscar produto..."
+            oninput="filterCatalog()"
+          />
+        </div>
+      </div>
+      <div class="catalog-grid" id="catalog-grid"></div>
+    </div>
+
     <script>
+      /* ── i18n ── */
       const i18n = {
         pt: {
+          home_title: "Como deseja continuar?",
+          home_sub: "Escolha uma das opções abaixo para começar a demo",
+          path_demo_title: "Demo rápida",
+          path_demo_desc:
+            "Preencha nome e imagem de um produto manualmente e visualize o TryOn.",
+          path_client_title: "Já sou cliente",
+          path_client_desc:
+            "Selecione seu catálogo de produtos e explore o TryOn em cada item.",
+          back: "Voltar",
           label_nome: "Nome do Produto",
           placeholder_nome: "Ex: Trench Coat Milano",
-          label_img: "Link da Imagem do Produto",
+          label_img: "Link da Imagem",
           placeholder_img: "https://...",
           btn_gerar: "Gerar Página →",
           btn_limpar: "Limpar tudo",
@@ -355,11 +692,25 @@
             "Este link não parece ser uma imagem válida. Use o link direto da imagem (ex: termina em .jpg, .png, .webp).",
           img_error_load:
             "Não foi possível carregar a imagem. Verifique se o link está correto e é de acesso público.",
+          select_client: "Selecione o cliente",
+          select_client_sub: "Carregue o catálogo de produtos",
+          loading: "Carregando...",
+          search_placeholder: "Buscar produto...",
+          products_count: "produtos",
         },
         en: {
+          home_title: "How would you like to continue?",
+          home_sub: "Choose one of the options below to start the demo",
+          path_demo_title: "Quick demo",
+          path_demo_desc:
+            "Fill in a product name and image manually to preview TryOn.",
+          path_client_title: "I'm already a client",
+          path_client_desc:
+            "Select your product catalog and explore TryOn on each item.",
+          back: "Back",
           label_nome: "Product Name",
           placeholder_nome: "E.g: Milano Trench Coat",
-          label_img: "Product Image URL",
+          label_img: "Image URL",
           placeholder_img: "https://...",
           btn_gerar: "Generate Page →",
           btn_limpar: "Clear all",
@@ -370,12 +721,16 @@
             "This link doesn't seem to be a valid image. Please use a direct image URL (e.g. ending in .jpg, .png, .webp).",
           img_error_load:
             "Could not load the image. Please check that the URL is correct and publicly accessible.",
+          select_client: "Select client",
+          select_client_sub: "Load the product catalog",
+          loading: "Loading...",
+          search_placeholder: "Search product...",
+          products_count: "products",
         },
       };
 
       let currentLang = localStorage.getItem("szb_lang") || "pt";
-      let imageValid = false;
-      let debounceTimer = null;
+      let allProducts = [];
 
       function setLang(lang) {
         currentLang = lang;
@@ -396,17 +751,142 @@
           const k = el.getAttribute("data-i18n-placeholder");
           if (i18n[lang][k]) el.placeholder = i18n[lang][k];
         });
-        // Re-aplica msg de erro no idioma atual se já estiver visível
-        if (
-          document.getElementById("img-error").classList.contains("visible")
-        ) {
-          document.getElementById("img-error-text").textContent =
-            i18n[lang][lastErrorKey] || i18n[lang].img_error;
+      }
+      setLang(currentLang);
+
+      /* ── View routing ── */
+      function showView(id) {
+        document
+          .querySelectorAll(".view")
+          .forEach((v) => v.classList.remove("active"));
+        document.getElementById("view-" + id).classList.add("active");
+        if (id === "client-select") loadClientList();
+      }
+
+      /* ── Client list ── */
+      async function loadClientList() {
+        const container = document.getElementById("client-list-items");
+        container.innerHTML = `<div class="loading-state">${i18n[currentLang].loading}</div>`;
+        try {
+          const res = await fetch("clientes/clients.json");
+          const clients = await res.json();
+          container.innerHTML = "";
+          container.style.cssText = "";
+          clients.forEach((client) => {
+            const el = document.createElement("div");
+            el.className = "client-item";
+            el.innerHTML = `<span>${client.name}</span><span class="client-item-arrow">→</span>`;
+            el.onclick = () => loadCatalog(client);
+            container.appendChild(el);
+          });
+        } catch {
+          container.innerHTML = `<div class="loading-state">Erro ao carregar clientes.</div>`;
         }
       }
 
-      setLang(currentLang);
+      /* ── CSV parser (TSV support) ── */
+      function parseCSV(text) {
+        const lines = text.trim().split("\n");
+        // detecta separador: tab ou vírgula
+        const sep = lines[0].includes("\t") ? "\t" : ",";
+        const headers = lines[0].split(sep).map((h) => h.trim());
+        return lines
+          .slice(1)
+          .map((line) => {
+            const cols = line.split(sep);
+            const obj = {};
+            headers.forEach((h, i) => (obj[h] = (cols[i] || "").trim()));
+            return obj;
+          })
+          .filter((r) => r.name || r.nome);
+      }
 
+      /* ── Load catalog ── */
+      async function loadCatalog(client) {
+        showView("catalog");
+        document.getElementById("catalog-client-name").textContent =
+          client.name;
+        document.getElementById(
+          "catalog-grid"
+        ).innerHTML = `<div class="loading-state">${i18n[currentLang].loading}</div>`;
+
+        try {
+          const res = await fetch(client.csv);
+          const text = await res.text();
+          allProducts = parseCSV(text);
+
+          document.getElementById(
+            "catalog-count"
+          ).textContent = `${allProducts.length} ${i18n[currentLang].products_count}`;
+
+          renderCatalog(allProducts);
+        } catch {
+          document.getElementById(
+            "catalog-grid"
+          ).innerHTML = `<div class="catalog-empty">Erro ao carregar catálogo.</div>`;
+        }
+      }
+
+      /* ── Render catalog grid ── */
+      function renderCatalog(products) {
+        const grid = document.getElementById("catalog-grid");
+        if (!products.length) {
+          grid.innerHTML = `<div class="catalog-empty">Nenhum produto encontrado.</div>`;
+          return;
+        }
+        grid.innerHTML = products
+          .map((p, i) => {
+            const img = p.images ? p.images.split("|")[0] : "";
+            const cat = p.categoryName || p.feedCategoryName || "";
+            const name = p.name || p.nome || "";
+            return `
+            <div class="product-thumb" onclick="openProduct(${i})">
+              <div class="product-thumb-img">
+                ${
+                  img
+                    ? `<img src="${img}" alt="${name}" onerror="this.parentElement.innerHTML='👗'">`
+                    : "👗"
+                }
+              </div>
+              <div class="product-thumb-info">
+                ${cat ? `<div class="product-thumb-cat">${cat}</div>` : ""}
+                <div class="product-thumb-name">${name}</div>
+              </div>
+            </div>`;
+          })
+          .join("");
+      }
+
+      /* ── Search filter ── */
+      function filterCatalog() {
+        const q = document
+          .getElementById("catalog-search-input")
+          .value.toLowerCase();
+        const filtered = q
+          ? allProducts.filter(
+              (p) =>
+                (p.name || p.nome || "").toLowerCase().includes(q) ||
+                (p.categoryName || "").toLowerCase().includes(q)
+            )
+          : allProducts;
+        renderCatalog(filtered);
+      }
+
+      /* ── Open individual product ── */
+      function openProduct(index) {
+        const p = allProducts[index];
+        const nome = p.name || p.nome || "";
+        const img = p.images ? p.images.split("|")[0] : "";
+        const params = new URLSearchParams();
+        if (nome) params.set("nome", nome);
+        if (img) params.set("img", img);
+        params.set("lang", currentLang);
+        window.open("produto.html?" + params.toString(), "_blank");
+      }
+
+      /* ── Quick demo form ── */
+      let imageValid = false;
+      let debounceTimer = null;
       let lastErrorKey = "img_error";
 
       function setImageState(state, errorKey) {
@@ -416,12 +896,10 @@
         const errTxt = document.getElementById("img-error-text");
         const preview = document.getElementById("img-preview-wrap");
         const btn = document.getElementById("btn-gerar");
-
         loading.classList.remove("visible");
         error.classList.remove("visible");
         preview.classList.remove("visible");
         input.classList.remove("input-error", "input-success");
-
         if (state === "loading") {
           loading.classList.add("visible");
           imageValid = false;
@@ -437,16 +915,14 @@
           error.classList.add("visible");
           input.classList.add("input-error");
           imageValid = false;
-          btn.disabled = false; // não bloqueia — pode gerar sem imagem
+          btn.disabled = false;
         } else {
-          // idle/vazio
           imageValid = false;
           btn.disabled = false;
         }
       }
 
       function validateImageUrl(url) {
-        // Tenta detectar se é um link de produto (não imagem) por padrões comuns
         const productPatterns = [
           /\/products?\//i,
           /\/item\//i,
@@ -459,44 +935,29 @@
           /zalando\./i,
           /\?(.*)(pid|sku|ref|id)=/i,
         ];
-        for (const p of productPatterns) {
-          if (p.test(url)) return "product_page";
-        }
-
-        // Verifica extensão de imagem conhecida
-        const imgExtPattern =
-          /\.(jpg|jpeg|png|webp|gif|avif|svg|bmp|tiff?)(\?.*)?$/i;
-        if (imgExtPattern.test(url)) return "likely_image";
-
-        // Não tem extensão nem parece produto — vai tentar carregar mesmo assim
+        for (const p of productPatterns) if (p.test(url)) return "product_page";
+        if (/\.(jpg|jpeg|png|webp|gif|avif|svg|bmp|tiff?)(\?.*)?$/i.test(url))
+          return "likely_image";
         return "unknown";
       }
 
       function onImageInput() {
         clearTimeout(debounceTimer);
         const url = document.getElementById("inp-imagem").value.trim();
-
         if (!url) {
           setImageState("idle");
           return;
         }
-
-        // Valida se parece URL
         try {
           new URL(url);
         } catch {
           setImageState("error", "img_error");
           return;
         }
-
-        const hint = validateImageUrl(url);
-
-        if (hint === "product_page") {
+        if (validateImageUrl(url) === "product_page") {
           setImageState("error", "img_error");
           return;
         }
-
-        // Debounce de 600ms antes de tentar carregar
         debounceTimer = setTimeout(() => {
           setImageState("loading");
           const testImg = new Image();
@@ -504,9 +965,7 @@
             document.getElementById("img-preview").src = url;
             setImageState("valid");
           };
-          testImg.onerror = () => {
-            setImageState("error", "img_error_load");
-          };
+          testImg.onerror = () => setImageState("error", "img_error_load");
           testImg.src = url;
         }, 600);
       }
@@ -514,18 +973,14 @@
       function gerar() {
         const nome = document.getElementById("inp-nome").value.trim();
         const img = document.getElementById("inp-imagem").value.trim();
-
         if (!nome && !img) {
           alert(i18n[currentLang].alert_vazio);
           return;
         }
-
-        // Bloqueia se há imagem preenchida mas inválida
         if (img && !imageValid) {
           document.getElementById("inp-imagem").focus();
           return;
         }
-
         const params = new URLSearchParams();
         if (nome) params.set("nome", nome);
         if (img) params.set("img", img);

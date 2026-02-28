@@ -15,14 +15,12 @@
         padding: 0;
         box-sizing: border-box;
       }
-
       body {
         font-family: "Inter", sans-serif;
         background: #f5f5f5;
         color: #1a1a1a;
         min-height: 100vh;
       }
-
       nav {
         padding: 16px 24px;
         background: #fff;
@@ -49,7 +47,6 @@
       .btn-voltar:hover {
         color: #1a1a1a;
       }
-
       .lang-toggle {
         display: flex;
         align-items: center;
@@ -75,14 +72,12 @@
         background: #1a1a1a;
         color: #fff;
       }
-
       .product {
         max-width: 480px;
         margin: 0 auto;
         background: #fff;
         animation: fadeUp 0.4s ease both;
       }
-
       @keyframes fadeUp {
         from {
           opacity: 0;
@@ -93,7 +88,6 @@
           transform: translateY(0);
         }
       }
-
       .product-image {
         position: relative;
         aspect-ratio: 3/4;
@@ -113,7 +107,6 @@
         font-size: 72px;
         color: #ccc;
       }
-
       .product-info {
         padding: 28px 24px 48px;
       }
@@ -130,7 +123,6 @@
         background: #1a1a1a;
         margin-bottom: 16px;
       }
-
       @media (min-width: 768px) {
         .product {
           max-width: 960px;
@@ -188,13 +180,13 @@
     <script>
       const i18n = {
         pt: {
-          btn_voltar: "← Voltar ao formulário",
+          btn_voltar: "← Voltar",
           page_title: "Produto",
           lang_attr: "pt-BR",
           sizebay_lang: "br",
         },
         en: {
-          btn_voltar: "← Back to form",
+          btn_voltar: "← Back",
           page_title: "Product",
           lang_attr: "en",
           sizebay_lang: "en",
@@ -210,7 +202,6 @@
       if (!nome && !img) {
         window.location.href = "index.html";
       } else {
-        // ── Preenche conteúdo ──
         document.title = nome || i18n[currentLang].page_title;
         document.querySelector('link[rel="canonical"]').href =
           "https://32c6c6-a9.myshopify.com/products/" +
@@ -224,7 +215,6 @@
           document.getElementById("prod-placeholder").style.display = "none";
         }
 
-        // ── Idioma ──
         function setLang(lang) {
           currentLang = lang;
           localStorage.setItem("szb_lang", lang);
@@ -244,12 +234,9 @@
 
         setLang(currentLang);
 
-        // ── Cookie ──
         document.cookie =
           "SIZEBAY_SESSION_ID_V4=0651FC19655De443cc7be89c4306ba6c1a20f4f05df2; path=/; SameSite=Lax";
 
-        // ── Sizebay: define ANTES de injetar o script, dentro do DOMContentLoaded ──
-        // Garante que o anchor (.product-image) já existe no DOM quando o script rodar
         window.SizebayTryOn = () => ({
           getTenantId: () => 6273,
           getEnvironment: () => "production",
@@ -257,7 +244,7 @@
           getSizeSystem: () => "EU",
           getAnchor: () => ".product-image",
           getModules: () => ["selfTryon"],
-          getLang: () => i18n[currentLang].sizebay_lang, // função, não valor fixo
+          getLang: () => i18n[currentLang].sizebay_lang,
           getSelfTryonPermalink: () =>
             "https://32c6c6-a9.myshopify.com/products/" +
             document
@@ -277,7 +264,6 @@
             "https://tryon-dev.internalsizebay.com/",
         });
 
-        // Injeta o script apenas após o DOM estar completamente carregado
         window.addEventListener("DOMContentLoaded", () => {
           if (document.getElementById("szb-tryon__implantation")) return;
           const script = document.createElement("script");
@@ -288,7 +274,6 @@
           document.body.appendChild(script);
         });
 
-        // Se DOMContentLoaded já disparou (script no final do body), injeta direto
         if (
           document.readyState === "interactive" ||
           document.readyState === "complete"
