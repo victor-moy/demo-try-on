@@ -10,5 +10,11 @@
     "name": "In Love",
     "logo": "https://adaptive-images.uooucdn.com.br/tr:w-200,h-55,c-at_max,pr-true,q-90/a22495-ogxytngyqt0/s/4c/55/e2/c2ac4dad9075da0694a7766ce3.svg",
     "csv": "clientes/in-love.csv"
+  },
+  {
+    "id": "monkyforce",
+    "name": "Monkyforce",
+    "logo": "https://acdn-us.mitiendanube.com/stores/001/307/484/themes/common/logo-205212659-1752757823-8f692f320b95a6531cb0b583d0de93971752757823-480-0.webp",
+    "csv": "clientes/monkyforce.csv"
   }
 ]
