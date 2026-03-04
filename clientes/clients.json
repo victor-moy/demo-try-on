@@ -16,5 +16,11 @@
     "name": "Monkyforce",
     "logo": "https://acdn-us.mitiendanube.com/stores/001/307/484/themes/common/logo-205212659-1752757823-8f692f320b95a6531cb0b583d0de93971752757823-480-0.webp",
     "csv": "clientes/monkyforce.csv"
+  },
+  {
+    "id": "maksu",
+    "name": "Maksu",
+    "logo": "https://acdn-us.mitiendanube.com/stores/001/307/484/themes/common/logo-205212659-1752757823-8f692f320b95a6531cb0b583d0de93971752757823-480-0.webp",
+    "csv": "clientes/maksu.csv"
   }
 ]
