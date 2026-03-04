@@ -22,5 +22,11 @@
     "name": "Maksu",
     "logo": "https://shopmaksu.com/cdn/shop/files/MAKSU_-01.png?v=1708087485&width=340",
     "csv": "clientes/maksu.csv"
+  },
+  {
+    "id": "vitatex",
+    "name": "Vitatex",
+    "logo": "https://vitatex.cl/cdn/shop/files/VITATEX.png?v=1757507376&width=500",
+    "csv": "clientes/vitatex.csv"
   }
 ]
