@@ -28,5 +28,17 @@
     "name": "Vitatex",
     "logo": "https://vitatex.cl/cdn/shop/files/VITATEX.png?v=1757507376&width=500",
     "csv": "clientes/vitatex.csv"
+  },
+  {
+    "id": "tufi-duek",
+    "name": "Tufi Duek",
+    "logo": "https://mimoemflor.com.br/wp-content/uploads/2021/10/Tufiduek.png",
+    "csv": "clientes/tufi-duek.csv"
+  },
+  {
+    "id": "skazi",
+    "name": "Skazi",
+    "logo": "https://mimoemflor.com.br/wp-content/uploads/2021/10/Tufiduek.png",
+    "csv": "clientes/skazi.csv"
   }
 ]
