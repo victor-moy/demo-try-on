@@ -40,5 +40,11 @@
     "name": "Skazi",
     "logo": "https://texbrasil.com.br/wp-content/uploads/2017/11/skazi-1.jpg",
     "csv": "clientes/skazi.csv"
+  },
+  {
+    "id": "svarts",
+    "name": "Svarts",
+    "logo": "https://svarts.com.br/cdn/shop/files/svarts-logo_110x_1.svg?v=1739898452&width=535",
+    "csv": "clientes/svarts.csv"
   }
 ]
