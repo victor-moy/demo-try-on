@@ -46,5 +46,11 @@
     "name": "Svarts",
     "logo": "https://svarts.com.br/cdn/shop/files/svarts-logo_110x_1.svg?v=1739898452&width=535",
     "csv": "clientes/svarts.csv"
+  },
+  {
+    "id": "sofia-godinho",
+    "name": "Sogia Godinho",
+    "logo": "https://www.sofiagodinho.com/cdn/shop/files/versa_aoBLACK02_-_Copia.png?v=1729114137&width=320",
+    "csv": "clientes/sofia-godinho.csv"
   }
 ]
