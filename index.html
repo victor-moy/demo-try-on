@@ -960,6 +960,7 @@
       const PAGE_SIZE = 50;
       let searchDebounce = null;
       let currentClient = null;
+      let visibleCardCount = 0;
 
       async function loadCatalogById(clientId) {
         const client = clientsData.find((c) => c.id === clientId);
@@ -1003,6 +1004,7 @@
           allProducts = parseCSV(text);
           filteredProducts = allProducts;
           currentPage = 0;
+          visibleCardCount = 0;
           document.getElementById(
             "catalog-count"
           ).textContent = `${allProducts.length} ${i18n[currentLang].products_count}`;
@@ -1043,6 +1045,9 @@
           return;
         }
 
+        const imgFit = currentClient?.imageFit || "cover";
+        const imgBg = imgFit === "contain" ? "background:#fff;" : "";
+
         slice.forEach((p, localIdx) => {
           const globalIdx = start + localIdx;
           const img = p.images ? p.images.split("|")[0] : "";
@@ -1051,30 +1056,36 @@
           el.className = "product-thumb";
           el.onclick = () => openProduct(globalIdx);
           if (!img) return;
-          const imgFit = currentClient?.imageFit || "cover";
           el.innerHTML = `
-            <div class="product-thumb-img">
-              <img src="${img}" alt="${name}" loading="lazy" style="object-fit:${imgFit}" onerror="this.closest('.product-thumb').style.display='none'">
+            <div class="product-thumb-img" style="${imgBg}">
+              <img src="${img}" alt="${name}" loading="lazy" style="object-fit:${imgFit}">
             </div>
             <div class="product-thumb-info">
               <div class="product-thumb-name">${name}</div>
             </div>`;
+          el.querySelector("img").onerror = () => {
+            el.style.display = "none";
+            visibleCardCount--;
+            updateCatalogFooter();
+          };
+          visibleCardCount++;
           grid.appendChild(el);
         });
 
         currentPage++;
-        const shown = Math.min(
-          currentPage * PAGE_SIZE,
-          filteredProducts.length
-        );
+        updateCatalogFooter();
+      }
+
+      function updateCatalogFooter() {
         const total = filteredProducts.length;
         const footer = document.getElementById("catalog-footer");
         const info = document.getElementById("catalog-pagination-info");
         const btn = document.getElementById("btn-load-more");
+        const allLoaded = currentPage * PAGE_SIZE >= total;
 
-        info.textContent = `${i18n[currentLang].showing} ${shown} ${i18n[currentLang].of} ${total} ${i18n[currentLang].products_count}`;
+        info.textContent = `${i18n[currentLang].showing} ${visibleCardCount} ${i18n[currentLang].of} ${total} ${i18n[currentLang].products_count}`;
 
-        if (shown < total) {
+        if (!allLoaded) {
           footer.style.display = "flex";
           btn.style.display = "block";
           btn.textContent = i18n[currentLang].load_more;
@@ -1102,6 +1113,7 @@
               )
             : allProducts;
           currentPage = 0;
+          visibleCardCount = 0;
           document.getElementById("catalog-grid").innerHTML = "";
           document.getElementById(
             "catalog-count"
