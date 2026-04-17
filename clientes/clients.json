@@ -52,5 +52,11 @@
     "name": "Sogia Godinho",
     "logo": "https://www.sofiagodinho.com/cdn/shop/files/versa_aoBLACK02_-_Copia.png?v=1729114137&width=320",
     "csv": "clientes/sofia-godinho.csv"
+  },
+  {
+    "id": "clovis-calcados",
+    "name": "Clovis Calçados",
+    "logo": "https://media.clovis.com.br/engine/DGN3sfGzsGsf2YHROnzlEZP-Kb2JE8EpqOOhRzHZK3g/019d207f-1ca2-7728-a5c3-9c9c9b7cf0e1",
+    "csv": "clientes/clovis-calcados.csv"
   }
 ]
