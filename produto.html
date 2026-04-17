@@ -210,14 +210,9 @@
           getAnchor: () => ".product-image",
           getModules: () => ["selfTryon"],
           getLang: () => i18n[currentLang].sizebay_lang,
-          getSelfTryonPermalink: () =>
-            "https://32c6c6-a9.myshopify.com/products/" +
-            document
-              .querySelector('link[rel="canonical"]')
-              .href.split("/products/")
-              .pop(),
+          getSelfTryonPermalink: () => window.location.href,
           getSelfTryonProductData: () => ({
-            product_id: "123",
+            product_id: window.location.href,
             title: document.getElementById("prod-titulo").textContent,
             price: null,
             image_url: img,
