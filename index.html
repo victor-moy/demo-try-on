@@ -956,11 +956,12 @@
       ════════════════════════════════ */
       let allProducts = [];
       let filteredProducts = [];
-      let currentPage = 0;
       const PAGE_SIZE = 50;
       let searchDebounce = null;
       let currentClient = null;
       let visibleCardCount = 0;
+      let nextProductIndex = 0;
+      let batchTargetVisible = 0;
 
       async function loadCatalogById(clientId) {
         const client = clientsData.find((c) => c.id === clientId);
@@ -1003,8 +1004,9 @@
           const text = await res.text();
           allProducts = parseCSV(text);
           filteredProducts = allProducts;
-          currentPage = 0;
+          nextProductIndex = 0;
           visibleCardCount = 0;
+          batchTargetVisible = 0;
           document.getElementById(
             "catalog-count"
           ).textContent = `${allProducts.length} ${i18n[currentLang].products_count}`;
@@ -1035,27 +1037,36 @@
 
       /* ── Append page ── */
       function appendPage() {
-        const grid = document.getElementById("catalog-grid");
-        const start = currentPage * PAGE_SIZE;
-        const slice = filteredProducts.slice(start, start + PAGE_SIZE);
-
-        if (currentPage === 0 && !slice.length) {
-          grid.innerHTML = `<div class="catalog-empty">Nenhum produto encontrado.</div>`;
+        if (nextProductIndex === 0 && filteredProducts.length === 0) {
+          document.getElementById("catalog-grid").innerHTML =
+            `<div class="catalog-empty">Nenhum produto encontrado.</div>`;
           document.getElementById("catalog-footer").style.display = "none";
           return;
         }
+        batchTargetVisible += PAGE_SIZE;
+        fillToTarget();
+      }
 
+      function fillToTarget() {
+        const grid = document.getElementById("catalog-grid");
         const imgFit = currentClient?.imageFit || "cover";
         const imgBg = imgFit === "contain" ? "background:#fff;" : "";
 
-        slice.forEach((p, localIdx) => {
-          const globalIdx = start + localIdx;
+        while (
+          nextProductIndex < filteredProducts.length &&
+          visibleCardCount < batchTargetVisible
+        ) {
+          const p = filteredProducts[nextProductIndex];
+          const globalIdx = nextProductIndex;
+          nextProductIndex++;
+
           const img = p.images ? p.images.split("|")[0] : "";
+          if (!img) continue;
+
           const name = p.name || p.nome || "";
           const el = document.createElement("div");
           el.className = "product-thumb";
           el.onclick = () => openProduct(globalIdx);
-          if (!img) return;
           el.innerHTML = `
             <div class="product-thumb-img" style="${imgBg}">
               <img src="${img}" alt="${name}" loading="lazy" style="object-fit:${imgFit}">
@@ -1066,13 +1077,13 @@
           el.querySelector("img").onerror = () => {
             el.style.display = "none";
             visibleCardCount--;
+            fillToTarget();
             updateCatalogFooter();
           };
           visibleCardCount++;
           grid.appendChild(el);
-        });
+        }
 
-        currentPage++;
         updateCatalogFooter();
       }
 
@@ -1081,7 +1092,7 @@
         const footer = document.getElementById("catalog-footer");
         const info = document.getElementById("catalog-pagination-info");
         const btn = document.getElementById("btn-load-more");
-        const allLoaded = currentPage * PAGE_SIZE >= total;
+        const allLoaded = nextProductIndex >= total;
 
         info.textContent = `${i18n[currentLang].showing} ${visibleCardCount} ${i18n[currentLang].of} ${total} ${i18n[currentLang].products_count}`;
 
@@ -1112,8 +1123,9 @@
                 (p.name || p.nome || "").toLowerCase().includes(q)
               )
             : allProducts;
-          currentPage = 0;
+          nextProductIndex = 0;
           visibleCardCount = 0;
+          batchTargetVisible = 0;
           document.getElementById("catalog-grid").innerHTML = "";
           document.getElementById(
             "catalog-count"
