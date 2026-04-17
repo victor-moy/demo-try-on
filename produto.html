@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
@@ -216,8 +216,8 @@
               .querySelector('link[rel="canonical"]')
               .href.split("/products/")
               .pop(),
-          getProductData: () => ({
-            product_id: null,
+          getSelfTryonProductData: () => ({
+            product_id: "123",
             title: document.getElementById("prod-titulo").textContent,
             price: null,
             image_url: img,
