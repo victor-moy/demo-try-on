@@ -181,8 +181,14 @@
         document.getElementById("prod-titulo").textContent = nome;
 
         if (img) {
-          document.getElementById("prod-img").src = img;
-          document.getElementById("prod-img").style.display = "block";
+          const imageFit = urlParams.get("imageFit") || "cover";
+          const imgEl = document.getElementById("prod-img");
+          imgEl.src = img;
+          imgEl.style.display = "block";
+          imgEl.style.objectFit = imageFit;
+          if (imageFit === "contain") {
+            document.querySelector(".product-image").style.background = "#fff";
+          }
           document.getElementById("prod-placeholder").style.display = "none";
         }
 
