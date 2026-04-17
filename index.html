@@ -1050,13 +1050,11 @@
           const el = document.createElement("div");
           el.className = "product-thumb";
           el.onclick = () => openProduct(globalIdx);
+          if (!img) return;
+          const imgFit = currentClient?.imageFit || "cover";
           el.innerHTML = `
             <div class="product-thumb-img">
-              ${
-                img
-                  ? `<img src="${img}" alt="${name}" loading="lazy" onerror="this.parentElement.innerHTML='⚠️'">`
-                  : "⚠️"
-              }
+              <img src="${img}" alt="${name}" loading="lazy" style="object-fit:${imgFit}" onerror="this.closest('.product-thumb').style.display='none'">
             </div>
             <div class="product-thumb-info">
               <div class="product-thumb-name">${name}</div>
